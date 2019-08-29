@@ -15,6 +15,9 @@ class CreateAssociatesTable extends Migration
     {
         Schema::create('associates', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('name', 255);
+            $table->string('document', 11)->unique();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

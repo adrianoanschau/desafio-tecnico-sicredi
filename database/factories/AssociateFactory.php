@@ -4,9 +4,14 @@
 
 use App\Models\Associate;
 use Faker\Generator as Faker;
+use JansenFelipe\FakerBR\FakerBR;
 
 $factory->define(Associate::class, function (Faker $faker) {
+
+    $faker->addProvider(new FakerBR());
+
     return [
-        //
+        'name' =>$faker->name,
+        'document' => $faker->cpf
     ];
 });
