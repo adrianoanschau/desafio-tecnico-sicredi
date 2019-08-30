@@ -22,39 +22,42 @@ class ScheduleTest extends TestCase
 
     public function testCanUpdateSchedule()
     {
-        $associate = factory(Schedule::class)->create();
+        /** @var Schedule $schedule */
+        $schedule = factory(Schedule::class)->create();
 
         $data = [
             'title' => $this->faker->name,
             'description' => $this->faker->cpf,
         ];
 
-        $this->put(route('schedules.update', $associate->id), $data)
+        $this->put(route('schedules.update', $schedule->id), $data)
             ->assertStatus(200)
             ->assertJson($data);
     }
 
     public function testCanShowSchedule()
     {
-        $associate = factory(Schedule::class)->create();
+        /** @var Schedule $schedule */
+        $schedule = factory(Schedule::class)->create();
 
-        $this->get(route('schedules.show', $associate->id))
+        $this->get(route('schedules.show', $schedule->id))
             ->assertStatus(200);
     }
 
     public function testCanDeleteSchedule()
     {
-        $associate = factory(Schedule::class)->create();
+        /** @var Schedule $schedule */
+        $schedule = factory(Schedule::class)->create();
 
-        $this->delete(route('schedules.destroy', $associate->id))
+        $this->delete(route('schedules.destroy', $schedule->id))
             ->assertStatus(204);
     }
 
     public function testCanListSchedules()
     {
         /** @var Collection $schedules */
-        $schedules = factory(Schedule::class, 2)->create()->map(function (Schedule $associate) {
-            return $associate->only([ 'id', 'title', 'description' ]);
+        $schedules = factory(Schedule::class, 2)->create()->map(function (Schedule $schedule) {
+            return $schedule->only([ 'id', 'title', 'description' ]);
         });
 
         $this->get(route('schedules.index'))

@@ -22,6 +22,7 @@ class AssociateTest extends TestCase
 
     public function testCanUpdateAssociate()
     {
+        /** @var Associate $schedule */
         $associate = factory(Associate::class)->create();
 
         $data = [
@@ -36,6 +37,7 @@ class AssociateTest extends TestCase
 
     public function testCanShowAssociate()
     {
+        /** @var Associate $schedule */
         $associate = factory(Associate::class)->create();
 
         $this->get(route('associates.show', $associate->id))
@@ -44,6 +46,7 @@ class AssociateTest extends TestCase
 
     public function testCanDeleteAssociate()
     {
+        /** @var Associate $schedule */
         $associate = factory(Associate::class)->create();
 
         $this->delete(route('associates.destroy', $associate->id))
