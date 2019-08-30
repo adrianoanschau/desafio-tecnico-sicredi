@@ -27,3 +27,5 @@ Route::resource('schedules', 'ScheduleController')->only([
 ]);
 Route::put('schedules/{schedule}/openSession', 'ScheduleController@openSession')
     ->name('schedules.openSession');
+Route::put('schedules/{schedule}/closeSession', 'ScheduleController@closeSession')
+    ->name('schedules.closeSession');
