@@ -8,29 +8,29 @@ class AssociateController extends Controller
 {
     public function index()
     {
-        return Associate::all();
+        return response()->json(Associate::all(), 200);
     }
 
     public function show(Associate $associate)
     {
-        return $associate;
+        return response()->json($associate, 200);
     }
 
     public function store()
     {
         $associate = Associate::create(request()->all());
-        return $associate;
+        return response()->json($associate, 201);
     }
 
     public function update(Associate $associate)
     {
         $associate->update(request()->all());
-        return $associate;
+        return response()->json($associate, 200);
     }
 
     public function destroy(Associate $associate)
     {
         $associate->delete();
-        return $associate;
+        return response()->json($associate, 204);
     }
 }

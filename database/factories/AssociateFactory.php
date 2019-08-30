@@ -8,7 +8,7 @@ use JansenFelipe\FakerBR\FakerBR;
 
 $factory->define(Associate::class, function (Faker $faker) {
 
-    $faker->addProvider(new FakerBR());
+    $faker->addProvider(new FakerBR($faker));
 
     return [
         'name' =>$faker->name,
