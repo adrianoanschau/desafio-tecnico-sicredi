@@ -21,3 +21,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::resource('associates', 'AssociateController')->only([
     'index', 'show', 'store', 'update', 'destroy'
 ]);
+
+Route::resource('schedules', 'ScheduleController')->only([
+    'index', 'show', 'store', 'update', 'destroy'
+]);
