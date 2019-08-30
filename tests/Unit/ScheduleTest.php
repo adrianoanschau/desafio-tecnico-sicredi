@@ -67,4 +67,16 @@ class ScheduleTest extends TestCase
                 '*' =>[ 'id', 'title', 'description' ]
             ]);
     }
+
+    public function testCanOpenScheduleSession()
+    {
+        /** @var Schedule $schedule */
+        $schedule = factory(Schedule::class)->create();
+
+        $this->post(route('schedules.openSession', [
+            'schedule' => $schedule->id
+        ]), [])
+            ->assertStatus(201)
+            ->assertJson($schedule->toArray());
+    }
 }
