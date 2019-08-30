@@ -56,4 +56,16 @@ class ScheduleController extends Controller
         $schedule->delete();
         return response()->json($schedule, 204);
     }
+
+    /**
+     * @param Schedule $schedule
+     *
+     * @return JsonResponse
+     */
+    public function openSession(Schedule $schedule)
+    {
+        $schedule->sessions()->create();
+        return response()->json($schedule, 201);
+
+    }
 }
