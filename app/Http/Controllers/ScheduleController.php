@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ScheduleResource;
 use App\Models\Schedule;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 
 class ScheduleController extends Controller
@@ -69,6 +70,22 @@ class ScheduleController extends Controller
             return response()->json([ 'message' => 'Esta pauta já possui uma sessão aberta.' ], 409);
         }
         $schedule->sessions()->create();
+        return response()->json(new ScheduleResource($schedule), 200);
+    }
+
+    /**
+     * @param Schedule $schedule
+     *
+     * @return JsonResponse
+     */
+    public function closeSession(Schedule $schedule)
+    {
+        if (is_null($schedule->currentSession)) {
+            return response()->json([ 'message' => 'Esta pauta não possui uma sessão aberta.' ], 404);
+        }
+        $schedule->currentSession()->update([
+            'closed_at' => Carbon::now(),
+        ]);
         return response()->json(new ScheduleResource($schedule), 200);
     }
 }
