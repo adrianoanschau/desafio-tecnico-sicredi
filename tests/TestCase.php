@@ -11,6 +11,9 @@ abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication, DatabaseMigrations;
 
+    /**
+     * @var Factory
+     */
     protected $faker;
 
     public function setUp(): void
