@@ -99,4 +99,46 @@ class ScheduleTest extends TestCase
             ->assertStatus(409)
             ->assertJson($response);
     }
+
+    public function testCanCloseScheduleSession()
+    {
+        /** @var Schedule $schedule */
+        $schedule = factory(Schedule::class)->create();
+
+        $this->put(route('schedules.openSession', [
+            'schedule' => $schedule->id,
+        ]), []);
+
+        $scheduleProcessed = Schedule::find($schedule->id);
+
+        $resource = new ScheduleResource($scheduleProcessed);
+
+        $response = $this->put(route('schedules.closeSession', [
+            'schedule' => $scheduleProcessed->id,
+        ]), [])
+            ->assertStatus(200);
+
+        $expected = $resource->response()->getData(true);
+
+        $assertResponse = $response->json();
+        $assertResponse['session_opened']['closed_at'] = $expected['session_opened']['closed_at'];
+
+        $this->assertSame($expected, $assertResponse);
+    }
+
+    public function testCanNotCloseScheduleSessionWhenNotHasOpened()
+    {
+        /** @var Schedule $schedule */
+        $schedule = factory(Schedule::class)->create();
+
+        $response = [
+            "message" => "Esta pauta não possui uma sessão aberta."
+        ];
+
+        $this->put(route('schedules.closeSession', [
+            'schedule' => $schedule->id,
+        ]), [])
+            ->assertStatus(404)
+            ->assertJson($response);
+    }
 }
