@@ -2,7 +2,9 @@
 
 namespace Tests\Unit;
 
+use App\Http\Resources\ScheduleResource;
 use App\Models\Schedule;
+use App\Models\ScheduleSession;
 use Illuminate\Support\Collection;
 use Tests\TestCase;
 
@@ -73,10 +75,28 @@ class ScheduleTest extends TestCase
         /** @var Schedule $schedule */
         $schedule = factory(Schedule::class)->create();
 
+        $resource = (new ScheduleResource($schedule))->resolve();
+
         $this->put(route('schedules.openSession', [
-            'schedule' => $schedule->id
+            'schedule' => $schedule->id,
         ]), [])
             ->assertStatus(200)
-            ->assertJson($schedule->toArray());
+            ->assertJson($resource);
+    }
+
+    public function testCanNotOpenScheduleSessionWhenAnotherIsOpened()
+    {
+        /** @var ScheduleSession $scheduleSession */
+        $scheduleSession = factory(ScheduleSession::class)->create();
+
+        $response = [
+            "message" => "Esta pauta já possui uma sessão aberta."
+        ];
+
+        $this->put(route('schedules.openSession', [
+            'schedule' => $scheduleSession->schedule->id,
+        ]), [])
+            ->assertStatus(409)
+            ->assertJson($response);
     }
 }
