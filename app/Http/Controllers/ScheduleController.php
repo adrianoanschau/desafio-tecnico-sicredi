@@ -65,7 +65,7 @@ class ScheduleController extends Controller
     public function openSession(Schedule $schedule)
     {
         $schedule->sessions()->create();
-        return response()->json($schedule, 201);
+        return response()->json($schedule, 200);
 
     }
 }

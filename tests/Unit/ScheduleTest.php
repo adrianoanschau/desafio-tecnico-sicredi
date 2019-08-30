@@ -73,10 +73,10 @@ class ScheduleTest extends TestCase
         /** @var Schedule $schedule */
         $schedule = factory(Schedule::class)->create();
 
-        $this->post(route('schedules.openSession', [
+        $this->put(route('schedules.openSession', [
             'schedule' => $schedule->id
         ]), [])
-            ->assertStatus(201)
+            ->assertStatus(200)
             ->assertJson($schedule->toArray());
     }
 }
