@@ -31,5 +31,6 @@
         <server name="SESSION_DRIVER" value="array"/>
         <server name="DB_CONNECTION" value="sqlite"/>
         <server name="APP_DEBUG" value="false"/>
+        <server name="DB_DATABASE" value="/home/adriano/Projects/desafio-tecnico-sicredi/database/test.sqlite"/>
     </php>
 </phpunit>
