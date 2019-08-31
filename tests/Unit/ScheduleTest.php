@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use App\Enums\HttpStatusCodeEnum;
 use App\Http\Resources\ScheduleResource;
+use App\Models\Associate;
 use App\Models\Schedule;
 use App\Models\ScheduleSession;
 use Illuminate\Support\Collection;
@@ -101,8 +102,8 @@ class ScheduleTest extends TestCase
             ->assertStatus(HttpStatusCodeEnum::SUCCESS)
             ->assertJson($resource);
 
-        $scheduleStored = Schedule::find($schedule->id);
-        $this->assertEquals($customTime, $scheduleStored->currentSession->opening_time);
+        $schedule->refresh();
+        $this->assertEquals($customTime, $schedule->currentSession->opening_time);
     }
 
     public function testCanNotOpenScheduleSessionWhenAnotherIsOpened()
@@ -130,12 +131,12 @@ class ScheduleTest extends TestCase
             'schedule' => $schedule->id,
         ]), []);
 
-        $scheduleProcessed = Schedule::find($schedule->id);
+        $schedule->refresh();
 
-        $resource = new ScheduleResource($scheduleProcessed);
+        $resource = new ScheduleResource($schedule);
 
         $response = $this->put(route('schedules.closeSession', [
-            'schedule' => $scheduleProcessed->id,
+            'schedule' => $schedule->id,
         ]), [])
             ->assertStatus(HttpStatusCodeEnum::SUCCESS);
 
@@ -159,5 +160,86 @@ class ScheduleTest extends TestCase
         ]), [])
             ->assertStatus(HttpStatusCodeEnum::NOT_FOUND)
             ->assertJson($response);
+    }
+
+    public function testCanVoteInScheduleSessionWithDataOfAssociateNotRegistered()
+    {
+        /** @var Schedule $schedule */
+        $schedule = factory(Schedule::class)->create();
+
+        $this->put(route('schedules.openSession', [
+            'schedule' => $schedule->id,
+        ]), []);
+
+        $schedule->refresh();
+
+        $associateData = [
+            'name' => $this->faker->name,
+            'document' => $this->faker->cpf,
+        ];
+
+        $resource = new ScheduleResource($schedule);
+        $expected = $resource->response()->getData(true);
+
+        $this->put(route('schedules.vote', [
+            'schedule' => $schedule->id,
+        ]), [
+            'option' => 'Y',
+            'associate' => $associateData
+        ])
+            ->assertStatus(HttpStatusCodeEnum::SUCCESS)
+            ->assertJson($expected);
+    }
+
+    public function testCanVoteInScheduleSessionWithDataOfAssociateRegistered()
+    {
+        /** @var Schedule $schedule */
+        $schedule = factory(Schedule::class)->create();
+
+        $this->put(route('schedules.openSession', [
+            'schedule' => $schedule->id,
+        ]), []);
+
+        $schedule->refresh();
+        $associate = factory(Associate::class)->create();
+
+        $resource = new ScheduleResource($schedule);
+        $expected = $resource->response()->getData(true);
+
+        $this->put(route('schedules.vote', [
+            'schedule' => $schedule->id,
+        ]), [
+            'option' => 'Y',
+            'associate_id' => $associate->id
+        ])
+            ->assertStatus(HttpStatusCodeEnum::SUCCESS)
+            ->assertJson($expected);
+    }
+
+    public function testCanVoteInScheduleSessionWithDataOfAssociateRegisteredWithOnlyDocument()
+    {
+        /** @var Schedule $schedule */
+        $schedule = factory(Schedule::class)->create();
+
+        $this->put(route('schedules.openSession', [
+            'schedule' => $schedule->id,
+        ]), []);
+
+        $schedule->refresh();
+        $associate = factory(Associate::class)->create();
+
+        $resource = new ScheduleResource($schedule);
+        $expected = $resource->response()->getData(true);
+
+        $this->put(route('schedules.vote', [
+            'schedule' => $schedule->id,
+        ]), [
+            'option' => 'Y',
+            'associate' => [
+                'document' => $associate->document
+            ]
+        ])
+            ->assertStatus(HttpStatusCodeEnum::SUCCESS)
+            ->assertJson($expected);
     }
 }
