@@ -6,6 +6,7 @@ use App\Enums\HttpStatusCodeEnum;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\ValidationException;
 
 class Handler extends ExceptionHandler
 {
@@ -65,7 +66,12 @@ class Handler extends ExceptionHandler
             ], HttpStatusCodeEnum::NOT_FOUND);
         }
 
-        dd($exception);
+        if ($exception instanceof ValidationException) {
+            return response()->json([
+                'message' => trans('exceptions.Validation error on uploaded data'),
+                'errors' => $exception->validator->errors(),
+            ], HttpStatusCodeEnum::BAD_REQUEST);
+        }
 
         return response()->json([
             'message' => trans('exceptions.Unknown error')

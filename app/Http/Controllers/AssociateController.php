@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Enums\HttpStatusCodeEnum;
+use App\Http\Requests\StoreAssociateRequest;
+use App\Http\Requests\UpdateAssociateRequest;
 use App\Http\Resources\AssociateResource;
 use App\Repositories\AssociateRepository;
 use Illuminate\Http\JsonResponse;
@@ -48,23 +50,27 @@ class AssociateController extends Controller
     }
 
     /**
+     * @param StoreAssociateRequest $request
+     *
      * @return JsonResponse
+     * @throws Exception
      */
-    public function store()
+    public function store(StoreAssociateRequest $request)
     {
-        $associate = $this->repository->create(request()->all());
+        $associate = $this->repository->create($request->all());
 
         return response()->json(new AssociateResource($associate), HttpStatusCodeEnum::CREATED);
     }
 
     /**
+     * @param UpdateAssociateRequest $request
      * @param int $id
      *
      * @return JsonResponse
      */
-    public function update(int $id)
+    public function update(UpdateAssociateRequest $request, int $id)
     {
-        $this->repository->update($id, request()->all());
+        $this->repository->update($id, $request->all());
         $associate = $this->repository->findByID($id);
 
         return response()->json(new AssociateResource($associate), HttpStatusCodeEnum::SUCCESS);

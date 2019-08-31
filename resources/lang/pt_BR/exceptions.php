@@ -9,4 +9,5 @@ return [
     'This schedule is already over' => 'Esta pauta já teve sua sessão encerrada',
     'You already voted for this session' => 'Você já votou nesta sessão',
     'System Existing Document' => 'Documento existente no sistema',
+    'Validation error on uploaded data' => 'Erro de validação nos dados enviados',
 ];

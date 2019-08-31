@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Enums\HttpStatusCodeEnum;
-use App\Exceptions\ScheduleNotHasSessionException;
-use App\Exceptions\InvalidVoteOptionException;
+use App\Http\Requests\OpenScheduleSessionRequest;
+use App\Http\Requests\StoreScheduleRequest;
+use App\Http\Requests\UpdateScheduleRequest;
+use App\Http\Requests\VoteScheduleSessionRequest;
 use App\Http\Resources\ScheduleResource;
 use App\Repositories\AssociateRepository;
 use App\Repositories\ScheduleRepository;
@@ -58,23 +60,26 @@ class ScheduleController extends Controller
     }
 
     /**
+     * @param StoreScheduleRequest $request
+     *
      * @return JsonResponse
      */
-    public function store()
+    public function store(StoreScheduleRequest $request)
     {
-        $schedule = $this->repository->create(request()->all());
+        $schedule = $this->repository->create($request->all());
 
         return response()->json(new ScheduleResource($schedule), HttpStatusCodeEnum::CREATED);
     }
 
     /**
+     * @param UpdateScheduleRequest $request
      * @param int $id
      *
      * @return JsonResponse
      */
-    public function update(int $id)
+    public function update(UpdateScheduleRequest $request, int $id)
     {
-        $this->repository->update($id, request()->all());
+        $this->repository->update($id, $request->all());
         $schedule = $this->repository->findByID($id);
 
         return response()->json(new ScheduleResource($schedule), HttpStatusCodeEnum::SUCCESS);
@@ -94,13 +99,13 @@ class ScheduleController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param OpenScheduleSessionRequest $request
      * @param int $id
      *
      * @return JsonResponse
      * @throws Exception
      */
-    public function openSession(Request $request, int $id)
+    public function openSession(OpenScheduleSessionRequest $request, int $id)
     {
         $schedule = $this->repository->openSession($id, $request->input('time'));
 
@@ -127,13 +132,13 @@ class ScheduleController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param VoteScheduleSessionRequest $request
      * @param int $id
      *
      * @return JsonResponse
      * @throws Exception
      */
-    public function vote(Request $request, int $id)
+    public function vote(VoteScheduleSessionRequest $request, int $id)
     {
         if ($request->has('associate_id')) {
             $associate = $this->associateRepository
