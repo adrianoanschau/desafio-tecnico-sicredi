@@ -9,9 +9,10 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 /**
  * @OA\Info(
- *     description="",
+ *     title="Desafio Técnico Sicredi",
+ *     description="Aplicação de Votação",
+ *     contact="Adriano Anschau <adrianoanschau@gmail.com>",
  *     version="1.0.0",
- *     title="Desafio Técnico Sicredi - Aplicação de Votação"
  * )
  *
  *

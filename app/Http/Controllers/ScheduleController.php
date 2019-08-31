@@ -52,6 +52,8 @@ class ScheduleController extends Controller
      */
 
     /**
+     * Lista Pautas
+     *
      * @return JsonResponse
      */
     public function index()
@@ -90,6 +92,8 @@ class ScheduleController extends Controller
      */
 
     /**
+     * Exibe uma Pauta
+     *
      * @param int $id
      *
      * @return JsonResponse
@@ -145,6 +149,8 @@ class ScheduleController extends Controller
      */
 
     /**
+     * Cadastra nova Pauta
+     *
      * @param StoreScheduleRequest $request
      *
      * @return JsonResponse
@@ -207,6 +213,8 @@ class ScheduleController extends Controller
      */
 
     /**
+     * Atualiza uma Pauta
+     *
      * @param UpdateScheduleRequest $request
      * @param int $id
      *
@@ -246,6 +254,8 @@ class ScheduleController extends Controller
      */
 
     /**
+     * Exclui uma Pauta
+     *
      * @param int $id
      *
      * @return JsonResponse
@@ -308,6 +318,8 @@ class ScheduleController extends Controller
      */
 
     /**
+     * Abre nova Sessão de Votação para uma Pauta
+     *
      * @param OpenScheduleSessionRequest $request
      * @param int $id
      *
@@ -366,6 +378,8 @@ class ScheduleController extends Controller
      */
 
     /**
+     * Fecha a Sessão de Votação de uma Pauta
+     *
      * @param int $id
      *
      * @return JsonResponse
@@ -423,6 +437,8 @@ class ScheduleController extends Controller
      */
 
     /**
+     * Adiciona um voto para uma Sessão de Votação de uma Pauta
+     *
      * @param VoteScheduleSessionRequest $request
      * @param int $id
      *

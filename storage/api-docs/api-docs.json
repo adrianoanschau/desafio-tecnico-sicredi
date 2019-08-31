@@ -1,8 +1,9 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Desafio Técnico Sicredi - Aplicação de Votação",
-        "description": "",
+        "title": "Desafio Técnico Sicredi",
+        "description": "Aplicação de Votação",
+        "contact": "Adriano Anschau <adrianoanschau@gmail.com>",
         "version": "1.0.0"
     },
     "paths": {

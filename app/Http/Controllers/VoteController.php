@@ -69,6 +69,8 @@ class VoteController extends Controller
      */
 
     /**
+     * Lista votos de uma Pauta
+     *
      * @param VoteResultRequest $request
      *
      * @return JsonResponse
@@ -118,6 +120,8 @@ class VoteController extends Controller
      */
 
     /**
+     * Exibe resultado de votação de uma Pauta
+     *
      * @param VoteResultRequest $request
      *
      * @return JsonResponse

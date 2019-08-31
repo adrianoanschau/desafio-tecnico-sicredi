@@ -46,6 +46,8 @@ class AssociateController extends Controller
      */
 
      /**
+      * Lista Associados
+      *
      * @return JsonResponse
      */
     public function index()
@@ -84,6 +86,8 @@ class AssociateController extends Controller
      */
 
     /**
+     * Exibe um Associado
+     *
      * @param int $id
      *
      * @return JsonResponse
@@ -150,6 +154,8 @@ class AssociateController extends Controller
      */
 
     /**
+     * Cadastra novo Associado
+     *
      * @param StoreAssociateRequest $request
      *
      * @return JsonResponse
@@ -223,6 +229,8 @@ class AssociateController extends Controller
      */
 
     /**
+     * Atualiza um Associado
+     *
      * @param UpdateAssociateRequest $request
      * @param int $id
      *
@@ -262,6 +270,8 @@ class AssociateController extends Controller
      */
 
     /**
+     * Exclui um Associado
+     *
      * @param int $id
      *
      * @return JsonResponse
