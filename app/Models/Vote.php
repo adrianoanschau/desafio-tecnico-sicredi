@@ -23,12 +23,4 @@ class Vote extends Model
     {
         return $this->belongsTo(Associate::class);
     }
-
-    /**
-     * @return BelongsTo
-     */
-    public function session()
-    {
-        return $this->belongsTo(ScheduleSession::class, 'schedule_session_id');
-    }
 }

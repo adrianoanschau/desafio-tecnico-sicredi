@@ -41,6 +41,12 @@ abstract class BaseRepository implements RepositoryInterface
         if (is_null($query)) {
             $query = $this->newQuery();
         }
+
+        return $query->paginate($take);
+
+        /**
+         * para versão 2 da API
+         *
         if (true == $paginate) {
             return $query->paginate($take);
         }
@@ -49,6 +55,7 @@ abstract class BaseRepository implements RepositoryInterface
             $query->take($take);
         }
         return $query->get();
+         * **/
     }
     /**
      * Returns all records.
@@ -64,16 +71,7 @@ abstract class BaseRepository implements RepositoryInterface
     {
         return $this->doQuery(null, $take, $paginate);
     }
-    /**
-     * @param string      $column
-     * @param string|null $key
-     *
-     * @return Collection
-     */
-    public function lists(string $column, string $key = null)
-    {
-        return $this->newQuery()->lists($column, $key);
-    }
+
     /**
      * Retrieves a record by his id
      * If fail is true $ fires ModelNotFoundException.
@@ -83,12 +81,9 @@ abstract class BaseRepository implements RepositoryInterface
      *
      * @return Model
      */
-    public function findByID(int $id, bool $fail = true)
+    public function findByID(int $id)
     {
-        if ($fail) {
-            return $this->newQuery()->findOrFail($id);
-        }
-        return $this->newQuery()->find($id);
+        return $this->newQuery()->findOrFail($id);
     }
 
     /**
@@ -121,16 +116,6 @@ abstract class BaseRepository implements RepositoryInterface
     public function delete(int $id)
     {
         return $this->findByID($id)->delete();
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return bool|mixed|null
-     */
-    public function forceDelete(int $id)
-    {
-        return $this->findByID($id)->forceDelete();
     }
 
 

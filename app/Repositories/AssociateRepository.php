@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class AssociateRepository extends BaseRepository
 {
+
     /** @var string */
     protected $modelClass = Associate::class;
 
