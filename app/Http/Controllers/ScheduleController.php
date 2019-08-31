@@ -5,29 +5,48 @@ namespace App\Http\Controllers;
 use App\Enums\HttpStatusCodeEnum;
 use App\Http\Resources\ScheduleResource;
 use App\Models\Schedule;
+use App\Repositories\ScheduleRepository;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
+use Exception;
 
 class ScheduleController extends Controller
 {
+    /** @var ScheduleRepository */
+    private $repository;
+
+    /**
+     * ScheduleController constructor.
+     *
+     * @param ScheduleRepository $repository
+     */
+    public function __construct(ScheduleRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
     /**
      * @return JsonResponse
      */
     public function index()
     {
+        $schedules = $this->repository->getAll();
+
         return response()->json(
-            ScheduleResource::collection(Schedule::all()),
+            ScheduleResource::collection($schedules),
             HttpStatusCodeEnum::SUCCESS
         );
     }
 
     /**
-     * @param Schedule $schedule
+     * @param int $id
      *
      * @return JsonResponse
      */
-    public function show(Schedule $schedule)
+    public function show(int $id)
     {
+        $schedule = $this->repository->findByID($id);
+
         return response()->json(new ScheduleResource($schedule), HttpStatusCodeEnum::SUCCESS);
     }
 
@@ -36,72 +55,76 @@ class ScheduleController extends Controller
      */
     public function store()
     {
-        $schedule = Schedule::create(request()->all());
+        $schedule = $this->repository->create(request()->all());
+
         return response()->json(new ScheduleResource($schedule), HttpStatusCodeEnum::CREATED);
     }
 
     /**
-     * @param Schedule $schedule
+     * @param int $id
      *
      * @return JsonResponse
      */
-    public function update(Schedule $schedule)
+    public function update(int $id)
     {
-        $schedule->update(request()->all());
+        $this->repository->update($id, request()->all());
+        $schedule = $this->repository->findByID($id);
+
         return response()->json(new ScheduleResource($schedule), HttpStatusCodeEnum::SUCCESS);
     }
 
     /**
-     * @param Schedule $schedule
+     * @param int $id
      *
      * @return JsonResponse
-     * @throws \Exception
+     * @throws Exception
      */
-    public function destroy(Schedule $schedule)
+    public function destroy(int $id)
     {
-        $schedule->delete();
+        $this->repository->delete($id);
+
         return response()->json(null, HttpStatusCodeEnum::NO_CONTENT);
     }
 
     /**
-     * @param Schedule $schedule
+     * @param int $id
      *
      * @return JsonResponse
      */
-    public function openSession(Schedule $schedule)
+    public function openSession(int $id)
     {
-        if (!is_null($schedule->currentSession)) {
+        try {
+            $schedule = $this->repository->openSession($id);
+
+            return response()->json(
+                new ScheduleResource($schedule),
+                HttpStatusCodeEnum::SUCCESS
+            );
+        } catch(Exception $exception) {
             return response()->json([
-                'message' => 'Esta pauta já possui uma sessão aberta.'
-            ], HttpStatusCodeEnum::CONFLICT);
+                'message' => $exception->getMessage()
+            ], $exception->getCode());
         }
-        $schedule->sessions()->create();
-        $schedule->refresh();
-        return response()->json(
-            new ScheduleResource($schedule),
-            HttpStatusCodeEnum::SUCCESS
-        );
     }
 
     /**
-     * @param Schedule $schedule
+     * @param int $id
      *
      * @return JsonResponse
      */
-    public function closeSession(Schedule $schedule)
+    public function closeSession(int $id)
     {
-        if (is_null($schedule->currentSession)) {
+        try {
+            $schedule = $this->repository->closeSession($id);
+
+            return response()->json(
+                new ScheduleResource($schedule),
+                HttpStatusCodeEnum::SUCCESS
+            );
+        } catch(Exception $exception) {
             return response()->json([
-                'message' => 'Esta pauta não possui uma sessão aberta.'
-            ], HttpStatusCodeEnum::NOT_FOUND);
+                'message' => $exception->getMessage()
+            ], $exception->getCode());
         }
-        $schedule->currentSession()->update([
-            'closed_at' => Carbon::now(),
-        ]);
-        $schedule->refresh();
-        return response()->json(
-            new ScheduleResource($schedule),
-            HttpStatusCodeEnum::SUCCESS
-        );
     }
 }

@@ -25,7 +25,7 @@ Route::resource('associates', 'AssociateController')->only([
 Route::resource('schedules', 'ScheduleController')->only([
     'index', 'show', 'store', 'update', 'destroy'
 ]);
-Route::put('schedules/{schedule}/openSession', 'ScheduleController@openSession')
+Route::put('schedules/{id}/openSession', 'ScheduleController@openSession')
     ->name('schedules.openSession');
-Route::put('schedules/{schedule}/closeSession', 'ScheduleController@closeSession')
+Route::put('schedules/{id}/closeSession', 'ScheduleController@closeSession')
     ->name('schedules.closeSession');
