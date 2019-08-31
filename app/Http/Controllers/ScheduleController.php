@@ -76,6 +76,7 @@ class ScheduleController extends Controller
             ], HttpStatusCodeEnum::CONFLICT);
         }
         $schedule->sessions()->create();
+        $schedule->refresh();
         return response()->json(
             new ScheduleResource($schedule),
             HttpStatusCodeEnum::SUCCESS
@@ -97,6 +98,7 @@ class ScheduleController extends Controller
         $schedule->currentSession()->update([
             'closed_at' => Carbon::now(),
         ]);
+        $schedule->refresh();
         return response()->json(
             new ScheduleResource($schedule),
             HttpStatusCodeEnum::SUCCESS
