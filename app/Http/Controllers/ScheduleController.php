@@ -131,8 +131,7 @@ class ScheduleController extends Controller
      * @param int $id
      *
      * @return JsonResponse
-     * @throws ScheduleNotHasSessionException
-     * @throws InvalidVoteOptionException
+     * @throws Exception
      */
     public function vote(Request $request, int $id)
     {

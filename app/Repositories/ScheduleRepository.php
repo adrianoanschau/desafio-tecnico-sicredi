@@ -6,6 +6,7 @@ use App\Enums\VoteOptionEnum;
 use App\Exceptions\InvalidVoteOptionException;
 use App\Exceptions\ScheduleHasSessionException;
 use App\Exceptions\ScheduleNotHasSessionException;
+use App\Exceptions\ScheduleSessionIsClosedException;
 use App\Models\Associate;
 use App\Models\Schedule;
 use Carbon\Carbon;
@@ -23,6 +24,7 @@ class ScheduleRepository extends BaseRepository
      *
      * @return Schedule
      * @throws ScheduleHasSessionException
+     * @throws ScheduleSessionIsClosedException
      */
     public function openSession(int $id, int $time = null)
     {
@@ -31,6 +33,10 @@ class ScheduleRepository extends BaseRepository
 
         if (!is_null($schedule->currentSession)) {
             throw new ScheduleHasSessionException();
+        }
+
+        if ($schedule->sessions->isNotEmpty()) {
+            throw new ScheduleSessionIsClosedException();
         }
 
         $data = [];
@@ -72,6 +78,7 @@ class ScheduleRepository extends BaseRepository
      *
      * @return Schedule
      * @throws InvalidVoteOptionException
+     * @throws ScheduleSessionIsClosedException
      * @throws ScheduleNotHasSessionException
      */
     public function vote(int $id, array $data)
@@ -89,6 +96,11 @@ class ScheduleRepository extends BaseRepository
         $schedule = $this->findByID($id);
 
         if (is_null($schedule->currentSession)) {
+
+            if ($schedule->sessions->isNotEmpty()) {
+                throw new ScheduleSessionIsClosedException();
+            }
+
             throw new ScheduleNotHasSessionException();
         }
 

@@ -52,6 +52,7 @@ class Handler extends ExceptionHandler
             $exception instanceof ScheduleHasSessionException
             || $exception instanceof ScheduleNotHasSessionException
             || $exception instanceof InvalidVoteOptionException
+            || $exception instanceof ScheduleSessionIsClosedException
         ) {
             return $exception->render($request);
         }
