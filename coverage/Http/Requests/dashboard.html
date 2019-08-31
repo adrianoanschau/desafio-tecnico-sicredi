@@ -2,7 +2,7 @@
 <html lang="en">
  <head>
   <meta charset="UTF-8">
-  <title>Dashboard for /home/adriano/Projects/desafio-tecnico-sicredi/app/Repositories/Contracts</title>
+  <title>Dashboard for /home/adriano/Projects/desafio-tecnico-sicredi/app/Http/Requests</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="../../.css/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="../../.css/nv.d3.min.css" rel="stylesheet" type="text/css">
@@ -17,8 +17,8 @@
       <nav aria-label="breadcrumb">
        <ol class="breadcrumb">
          <li class="breadcrumb-item"><a href="../../index.html">/home/adriano/Projects/desafio-tecnico-sicredi/app</a></li>
-         <li class="breadcrumb-item"><a href="../index.html">Repositories</a></li>
-         <li class="breadcrumb-item"><a href="index.html">Contracts</a></li>
+         <li class="breadcrumb-item"><a href="../index.html">Http</a></li>
+         <li class="breadcrumb-item"><a href="index.html">Requests</a></li>
          <li class="breadcrumb-item active">(Dashboard)</li>
 
        </ol>
@@ -156,7 +156,7 @@ $(document).ready(function() {
       .yAxis.tickFormat(d3.format('d'));
 
     d3.select('#classCoverageDistribution svg')
-      .datum(getCoverageDistributionData([0,0,0,0,0,0,0,0,0,0,0,0], "Class Coverage"))
+      .datum(getCoverageDistributionData([0,0,0,0,0,0,0,0,0,0,0,6], "Class Coverage"))
       .transition().duration(500).call(chart);
 
     nv.utils.windowResize(chart.update);
@@ -174,7 +174,7 @@ $(document).ready(function() {
       .yAxis.tickFormat(d3.format('d'));
 
     d3.select('#methodCoverageDistribution svg')
-      .datum(getCoverageDistributionData([0,0,0,0,0,0,0,0,0,0,0,0], "Method Coverage"))
+      .datum(getCoverageDistributionData([0,0,0,0,0,0,0,0,0,0,0,12], "Method Coverage"))
       .transition().duration(500).call(chart);
 
     nv.utils.windowResize(chart.update);
@@ -224,7 +224,7 @@ $(document).ready(function() {
     chart.yAxis.axisLabel('Cyclomatic Complexity');
 
     d3.select('#classComplexity svg')
-      .datum(getComplexityData([], 'Class Complexity'))
+      .datum(getComplexityData([[100,2,"<a href=\"OpenScheduleSessionRequest.php.html#7\">App\\Http\\Requests\\OpenScheduleSessionRequest<\/a>"],[100,2,"<a href=\"StoreAssociateRequest.php.html#7\">App\\Http\\Requests\\StoreAssociateRequest<\/a>"],[100,2,"<a href=\"StoreScheduleRequest.php.html#7\">App\\Http\\Requests\\StoreScheduleRequest<\/a>"],[100,2,"<a href=\"UpdateAssociateRequest.php.html#7\">App\\Http\\Requests\\UpdateAssociateRequest<\/a>"],[100,2,"<a href=\"UpdateScheduleRequest.php.html#7\">App\\Http\\Requests\\UpdateScheduleRequest<\/a>"],[100,2,"<a href=\"VoteScheduleSessionRequest.php.html#7\">App\\Http\\Requests\\VoteScheduleSessionRequest<\/a>"]], 'Class Complexity'))
       .transition()
       .duration(500)
       .call(chart);
@@ -248,7 +248,7 @@ $(document).ready(function() {
     chart.yAxis.axisLabel('Method Complexity');
 
     d3.select('#methodComplexity svg')
-      .datum(getComplexityData([], 'Method Complexity'))
+      .datum(getComplexityData([[100,1,"<a href=\"OpenScheduleSessionRequest.php.html#14\">App\\Http\\Requests\\OpenScheduleSessionRequest::authorize<\/a>"],[100,1,"<a href=\"OpenScheduleSessionRequest.php.html#24\">App\\Http\\Requests\\OpenScheduleSessionRequest::rules<\/a>"],[100,1,"<a href=\"StoreAssociateRequest.php.html#14\">App\\Http\\Requests\\StoreAssociateRequest::authorize<\/a>"],[100,1,"<a href=\"StoreAssociateRequest.php.html#24\">App\\Http\\Requests\\StoreAssociateRequest::rules<\/a>"],[100,1,"<a href=\"StoreScheduleRequest.php.html#14\">App\\Http\\Requests\\StoreScheduleRequest::authorize<\/a>"],[100,1,"<a href=\"StoreScheduleRequest.php.html#24\">App\\Http\\Requests\\StoreScheduleRequest::rules<\/a>"],[100,1,"<a href=\"UpdateAssociateRequest.php.html#14\">App\\Http\\Requests\\UpdateAssociateRequest::authorize<\/a>"],[100,1,"<a href=\"UpdateAssociateRequest.php.html#24\">App\\Http\\Requests\\UpdateAssociateRequest::rules<\/a>"],[100,1,"<a href=\"UpdateScheduleRequest.php.html#14\">App\\Http\\Requests\\UpdateScheduleRequest::authorize<\/a>"],[100,1,"<a href=\"UpdateScheduleRequest.php.html#24\">App\\Http\\Requests\\UpdateScheduleRequest::rules<\/a>"],[100,1,"<a href=\"VoteScheduleSessionRequest.php.html#14\">App\\Http\\Requests\\VoteScheduleSessionRequest::authorize<\/a>"],[100,1,"<a href=\"VoteScheduleSessionRequest.php.html#24\">App\\Http\\Requests\\VoteScheduleSessionRequest::rules<\/a>"]], 'Method Complexity'))
       .transition()
       .duration(500)
       .call(chart);
