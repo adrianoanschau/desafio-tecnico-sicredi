@@ -136,7 +136,9 @@ class ScheduleController extends Controller
      */
     public function vote(Request $request, int $id)
     {
-        $associate = $this->associateRepository->findByID($request->input('associate_id'));
+        $associate = $this->associateRepository
+            ->findByID($request->input('associate_id'));
+
         $schedule = $this->repository->vote($id, [
             'associate' => $associate,
             'option' => $request->input('option'),
