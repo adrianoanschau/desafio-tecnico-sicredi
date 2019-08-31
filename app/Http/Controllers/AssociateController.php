@@ -3,27 +3,48 @@
 namespace App\Http\Controllers;
 
 use App\Enums\HttpStatusCodeEnum;
-use App\Models\Associate;
+use App\Http\Resources\AssociateResource;
+use App\Repositories\AssociateRepository;
 use Illuminate\Http\JsonResponse;
+use Exception;
 
 class AssociateController extends Controller
 {
+    /** @var AssociateRepository */
+    private $repository;
+
+    /**
+     * AssociateController constructor.
+     * @param AssociateRepository $repository
+     */
+    public function __construct(AssociateRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
     /**
      * @return JsonResponse
      */
     public function index()
     {
-        return response()->json(Associate::all(), HttpStatusCodeEnum::SUCCESS);
+        $associates = $this->repository->getAll();
+
+        return response()->json(
+            AssociateResource::collection($associates),
+            HttpStatusCodeEnum::SUCCESS
+        );
     }
 
     /**
-     * @param Associate $associate
+     * @param int $id
      *
      * @return JsonResponse
      */
-    public function show(Associate $associate)
+    public function show(int $id)
     {
-        return response()->json($associate, HttpStatusCodeEnum::SUCCESS);
+        $associate = $this->repository->findByID($id);
+
+        return response()->json(new AssociateResource($associate), HttpStatusCodeEnum::SUCCESS);
     }
 
     /**
@@ -31,30 +52,34 @@ class AssociateController extends Controller
      */
     public function store()
     {
-        $associate = Associate::create(request()->all());
-        return response()->json($associate, HttpStatusCodeEnum::CREATED);
+        $associate = $this->repository->create(request()->all());
+
+        return response()->json(new AssociateResource($associate), HttpStatusCodeEnum::CREATED);
     }
 
     /**
-     * @param Associate $associate
+     * @param int $id
      *
      * @return JsonResponse
      */
-    public function update(Associate $associate)
+    public function update(int $id)
     {
-        $associate->update(request()->all());
-        return response()->json($associate, HttpStatusCodeEnum::SUCCESS);
+        $this->repository->update($id, request()->all());
+        $associate = $this->repository->findByID($id);
+
+        return response()->json(new AssociateResource($associate), HttpStatusCodeEnum::SUCCESS);
     }
 
     /**
-     * @param Associate $associate
+     * @param int $id
      *
      * @return JsonResponse
-     * @throws \Exception
+     * @throws Exception
      */
-    public function destroy(Associate $associate)
+    public function destroy(int $id)
     {
-        $associate->delete();
+        $this->repository->delete($id);
+
         return response()->json(null, HttpStatusCodeEnum::NO_CONTENT);
     }
 }
