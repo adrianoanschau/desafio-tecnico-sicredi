@@ -120,11 +120,9 @@ class ScheduleTest extends TestCase
             ->assertStatus(HttpStatusCodeEnum::SUCCESS);
 
         $expected = $resource->response()->getData(true);
+        unset($expected['session_opened']);
 
-        $assertResponse = $response->json();
-        $assertResponse['session_opened']['closed_at'] = $expected['session_opened']['closed_at'];
-
-        $this->assertSame($expected, $assertResponse);
+        $this->assertSame($expected, $response->json());
     }
 
     public function testCanNotCloseScheduleSessionWhenNotHasOpened()

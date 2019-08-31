@@ -2,7 +2,7 @@
 <html lang="en">
  <head>
   <meta charset="UTF-8">
-  <title>Dashboard for /home/adriano/Projects/desafio-tecnico-sicredi/app/Models</title>
+  <title>Dashboard for /home/adriano/Projects/desafio-tecnico-sicredi/app/Enums</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="../.css/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="../.css/nv.d3.min.css" rel="stylesheet" type="text/css">
@@ -17,7 +17,7 @@
       <nav aria-label="breadcrumb">
        <ol class="breadcrumb">
          <li class="breadcrumb-item"><a href="../index.html">/home/adriano/Projects/desafio-tecnico-sicredi/app</a></li>
-         <li class="breadcrumb-item"><a href="index.html">Models</a></li>
+         <li class="breadcrumb-item"><a href="index.html">Enums</a></li>
          <li class="breadcrumb-item active">(Dashboard)</li>
 
        </ol>
@@ -155,7 +155,7 @@ $(document).ready(function() {
       .yAxis.tickFormat(d3.format('d'));
 
     d3.select('#classCoverageDistribution svg')
-      .datum(getCoverageDistributionData([0,0,0,0,0,0,0,0,0,0,0,3], "Class Coverage"))
+      .datum(getCoverageDistributionData([0,0,0,0,0,0,0,0,0,0,0,1], "Class Coverage"))
       .transition().duration(500).call(chart);
 
     nv.utils.windowResize(chart.update);
@@ -173,7 +173,7 @@ $(document).ready(function() {
       .yAxis.tickFormat(d3.format('d'));
 
     d3.select('#methodCoverageDistribution svg')
-      .datum(getCoverageDistributionData([0,0,0,0,0,0,0,0,0,0,0,3], "Method Coverage"))
+      .datum(getCoverageDistributionData([0,0,0,0,0,0,0,0,0,0,0,0], "Method Coverage"))
       .transition().duration(500).call(chart);
 
     nv.utils.windowResize(chart.update);
@@ -223,7 +223,7 @@ $(document).ready(function() {
     chart.yAxis.axisLabel('Cyclomatic Complexity');
 
     d3.select('#classComplexity svg')
-      .datum(getComplexityData([[100,0,"<a href=\"Associate.php.html#8\">App\\Models\\Associate<\/a>"],[100,2,"<a href=\"Schedule.php.html#10\">App\\Models\\Schedule<\/a>"],[100,1,"<a href=\"ScheduleSession.php.html#9\">App\\Models\\ScheduleSession<\/a>"]], 'Class Complexity'))
+      .datum(getComplexityData([[100,0,"<a href=\"HttpStatusCodeEnum.php.html#12\">App\\Enums\\HttpStatusCodeEnum<\/a>"]], 'Class Complexity'))
       .transition()
       .duration(500)
       .call(chart);
@@ -247,7 +247,7 @@ $(document).ready(function() {
     chart.yAxis.axisLabel('Method Complexity');
 
     d3.select('#methodComplexity svg')
-      .datum(getComplexityData([[100,1,"<a href=\"Schedule.php.html#23\">App\\Models\\Schedule::sessions<\/a>"],[100,1,"<a href=\"Schedule.php.html#31\">App\\Models\\Schedule::currentSession<\/a>"],[100,1,"<a href=\"ScheduleSession.php.html#26\">App\\Models\\ScheduleSession::schedule<\/a>"]], 'Method Complexity'))
+      .datum(getComplexityData([], 'Method Complexity'))
       .transition()
       .duration(500)
       .call(chart);
