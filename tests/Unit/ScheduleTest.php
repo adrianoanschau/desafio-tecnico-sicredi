@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Enums\HttpStatusCodeEnum;
 use App\Http\Resources\ScheduleResource;
 use App\Models\Schedule;
 use App\Models\ScheduleSession;
@@ -18,7 +19,7 @@ class ScheduleTest extends TestCase
         ];
 
         $this->post(route('schedules.store'), $data)
-            ->assertStatus(201)
+            ->assertStatus(HttpStatusCodeEnum::CREATED)
             ->assertJson($data);
     }
 
@@ -33,7 +34,7 @@ class ScheduleTest extends TestCase
         ];
 
         $this->put(route('schedules.update', $schedule->id), $data)
-            ->assertStatus(200)
+            ->assertStatus(HttpStatusCodeEnum::SUCCESS)
             ->assertJson($data);
     }
 
@@ -43,7 +44,7 @@ class ScheduleTest extends TestCase
         $schedule = factory(Schedule::class)->create();
 
         $this->get(route('schedules.show', $schedule->id))
-            ->assertStatus(200);
+            ->assertStatus(HttpStatusCodeEnum::SUCCESS);
     }
 
     public function testCanDeleteSchedule()
@@ -52,7 +53,7 @@ class ScheduleTest extends TestCase
         $schedule = factory(Schedule::class)->create();
 
         $this->delete(route('schedules.destroy', $schedule->id))
-            ->assertStatus(204);
+            ->assertStatus(HttpStatusCodeEnum::NO_CONTENT);
     }
 
     public function testCanListSchedules()
@@ -63,7 +64,7 @@ class ScheduleTest extends TestCase
         });
 
         $this->get(route('schedules.index'))
-            ->assertStatus(200)
+            ->assertStatus(HttpStatusCodeEnum::SUCCESS)
             ->assertJson($schedules->toArray())
             ->assertJsonStructure([
                 '*' =>[ 'id', 'title', 'description' ]
@@ -80,7 +81,7 @@ class ScheduleTest extends TestCase
         $this->put(route('schedules.openSession', [
             'schedule' => $schedule->id,
         ]), [])
-            ->assertStatus(200)
+            ->assertStatus(HttpStatusCodeEnum::SUCCESS)
             ->assertJson($resource);
     }
 
@@ -96,7 +97,7 @@ class ScheduleTest extends TestCase
         $this->put(route('schedules.openSession', [
             'schedule' => $scheduleSession->schedule->id,
         ]), [])
-            ->assertStatus(409)
+            ->assertStatus(HttpStatusCodeEnum::CONFLICT)
             ->assertJson($response);
     }
 
@@ -116,7 +117,7 @@ class ScheduleTest extends TestCase
         $response = $this->put(route('schedules.closeSession', [
             'schedule' => $scheduleProcessed->id,
         ]), [])
-            ->assertStatus(200);
+            ->assertStatus(HttpStatusCodeEnum::SUCCESS);
 
         $expected = $resource->response()->getData(true);
 
@@ -138,7 +139,7 @@ class ScheduleTest extends TestCase
         $this->put(route('schedules.closeSession', [
             'schedule' => $schedule->id,
         ]), [])
-            ->assertStatus(404)
+            ->assertStatus(HttpStatusCodeEnum::NOT_FOUND)
             ->assertJson($response);
     }
 }

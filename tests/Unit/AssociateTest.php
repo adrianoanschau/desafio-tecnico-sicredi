@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Enums\HttpStatusCodeEnum;
 use App\Models\Associate;
 use Illuminate\Support\Collection;
 use Tests\TestCase;
@@ -16,7 +17,7 @@ class AssociateTest extends TestCase
         ];
 
         $this->post(route('associates.store'), $data)
-            ->assertStatus(201)
+            ->assertStatus(HttpStatusCodeEnum::CREATED)
             ->assertJson($data);
     }
 
@@ -31,7 +32,7 @@ class AssociateTest extends TestCase
         ];
 
         $this->put(route('associates.update', $associate->id), $data)
-            ->assertStatus(200)
+            ->assertStatus(HttpStatusCodeEnum::SUCCESS)
             ->assertJson($data);
     }
 
@@ -41,7 +42,7 @@ class AssociateTest extends TestCase
         $associate = factory(Associate::class)->create();
 
         $this->get(route('associates.show', $associate->id))
-            ->assertStatus(200);
+            ->assertStatus(HttpStatusCodeEnum::SUCCESS);
     }
 
     public function testCanDeleteAssociate()
@@ -50,7 +51,7 @@ class AssociateTest extends TestCase
         $associate = factory(Associate::class)->create();
 
         $this->delete(route('associates.destroy', $associate->id))
-            ->assertStatus(204);
+            ->assertStatus(HttpStatusCodeEnum::NO_CONTENT);
     }
 
     public function testCanListAssociates()
@@ -61,7 +62,7 @@ class AssociateTest extends TestCase
         });
 
         $this->get(route('associates.index'))
-            ->assertStatus(200)
+            ->assertStatus(HttpStatusCodeEnum::SUCCESS)
             ->assertJson($associates->toArray())
             ->assertJsonStructure([
                 '*' =>[ 'id', 'name', 'document' ]

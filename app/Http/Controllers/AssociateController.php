@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\HttpStatusCodeEnum;
 use App\Models\Associate;
 use Illuminate\Http\JsonResponse;
 
@@ -12,7 +13,7 @@ class AssociateController extends Controller
      */
     public function index()
     {
-        return response()->json(Associate::all(), 200);
+        return response()->json(Associate::all(), HttpStatusCodeEnum::SUCCESS);
     }
 
     /**
@@ -22,7 +23,7 @@ class AssociateController extends Controller
      */
     public function show(Associate $associate)
     {
-        return response()->json($associate, 200);
+        return response()->json($associate, HttpStatusCodeEnum::SUCCESS);
     }
 
     /**
@@ -31,7 +32,7 @@ class AssociateController extends Controller
     public function store()
     {
         $associate = Associate::create(request()->all());
-        return response()->json($associate, 201);
+        return response()->json($associate, HttpStatusCodeEnum::CREATED);
     }
 
     /**
@@ -42,7 +43,7 @@ class AssociateController extends Controller
     public function update(Associate $associate)
     {
         $associate->update(request()->all());
-        return response()->json($associate, 200);
+        return response()->json($associate, HttpStatusCodeEnum::SUCCESS);
     }
 
     /**
@@ -54,6 +55,6 @@ class AssociateController extends Controller
     public function destroy(Associate $associate)
     {
         $associate->delete();
-        return response()->json($associate, 204);
+        return response()->json(null, HttpStatusCodeEnum::NO_CONTENT);
     }
 }
