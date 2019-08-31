@@ -7,7 +7,7 @@ use Exception;
 
 class UniqueVotePerSessionException extends Exception
 {
-    public function render($request)
+    public function render()
     {
         return response()->json([
             'message' => trans('exceptions.You already voted for this session'),

@@ -7,7 +7,7 @@ use Exception;
 
 class UniqueDocumentAssociateException extends Exception
 {
-    public function render($request)
+    public function render()
     {
         return response()->json([
             'message' => trans('exceptions.System Existing Document'),

@@ -7,8 +7,12 @@ use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Contracts\Validation\Validator;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
 
 class Handler extends ExceptionHandler
 {
@@ -32,10 +36,10 @@ class Handler extends ExceptionHandler
     ];
 
     /**
-     * Report or log an exception.
+     * @param Exception $exception
      *
-     * @param  \Exception  $exception
-     * @return void
+     * @return mixed|void
+     * @throws Exception
      */
     public function report(Exception $exception)
     {
@@ -43,48 +47,92 @@ class Handler extends ExceptionHandler
     }
 
     /**
+     * @param Request $request
+     * @param Exception $exception
+     *
+     * @return JsonResponse
+     */
+    public function renderCustom(Request $request, Exception $exception)
+    {
+        return $exception->render();
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function renderModelNotFoundException()
+    {
+        return response()->json([
+            'message' => trans('exceptions.Resource not found'),
+        ], HttpStatusCodeEnum::NOT_FOUND);
+    }
+
+    /**
+     * @param Validator $validator
+     *
+     * @return JsonResponse
+     */
+    public function renderValidationException(Validator $validator)
+    {
+        return response()->json([
+            'message' => trans('exceptions.Validation error on uploaded data'),
+            'errors' => $validator->errors(),
+        ], HttpStatusCodeEnum::BAD_REQUEST);
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function renderNotFoundHttpException()
+    {
+        return response()->json([
+            'message' => trans('exceptions.Invalid route')
+        ], HttpStatusCodeEnum::NOT_FOUND);
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function renderMethodNotAllowedException()
+    {
+        return response()->json([
+            'message' => trans('exceptions.Method not allowed for this route')
+        ], HttpStatusCodeEnum::METHOD_NOT_ALLOWED);
+    }
+
+    /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $exception
-     * @return \Illuminate\Http\Response
+     * @param  Request  $request
+     * @param  Exception  $exception
+     * @return Response|JsonResponse
      */
     public function render($request, Exception $exception)
     {
         if (
             $exception instanceof ScheduleHasSessionException
             || $exception instanceof ScheduleNotHasSessionException
-            || $exception instanceof InvalidVoteOptionException
             || $exception instanceof ScheduleSessionIsClosedException
             || $exception instanceof UniqueVotePerSessionException
             || $exception instanceof UniqueDocumentAssociateException
         ) {
-            return $exception->render($request);
+            return $this->renderCustom($request, $exception);
         }
 
         if ($exception instanceof ModelNotFoundException) {
-            return response()->json([
-                'message' => trans('exceptions.Resource not found'),
-            ], HttpStatusCodeEnum::NOT_FOUND);
+            return $this->renderModelNotFoundException();
         }
 
         if ($exception instanceof ValidationException) {
-            return response()->json([
-                'message' => trans('exceptions.Validation error on uploaded data'),
-                'errors' => $exception->validator->errors(),
-            ], HttpStatusCodeEnum::BAD_REQUEST);
+            return $this->renderValidationException($exception->validator);
         }
 
         if ($exception instanceof NotFoundHttpException) {
-            return response()->json([
-                'message' => trans('exceptions.Invalid route')
-            ], HttpStatusCodeEnum::NOT_FOUND);
+            return $this->renderNotFoundHttpException();
         }
 
         if ($exception instanceof MethodNotAllowedHttpException) {
-            return response()->json([
-                'message' => trans('exceptions.Method not allowed for this route')
-            ], HttpStatusCodeEnum::METHOD_NOT_ALLOWED);
+            return $this->renderMethodNotAllowedException();
         }
 
         return response()->json([

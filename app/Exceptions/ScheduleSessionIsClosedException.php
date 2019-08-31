@@ -7,7 +7,7 @@ use Exception;
 
 class ScheduleSessionIsClosedException extends Exception
 {
-    public function render($request)
+    public function render()
     {
         return response()->json([
             'message' => trans('exceptions.This schedule is already over'),
