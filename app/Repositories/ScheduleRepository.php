@@ -2,7 +2,8 @@
 
 namespace App\Repositories;
 
-use App\Enums\HttpStatusCodeEnum;
+use App\Exceptions\ScheduleHasSessionException;
+use App\Exceptions\ScheduleNotHasSessionException;
 use App\Models\Schedule;
 use Carbon\Carbon;
 use Exception;
@@ -21,10 +22,11 @@ class ScheduleRepository extends BaseRepository
      */
     public function openSession(int $id)
     {
-        $schedule = $this->newQuery()->find($id);
+        /** @var Schedule $schedule */
+        $schedule = $this->findByID($id);
 
         if (!is_null($schedule->currentSession)) {
-            throw new Exception('Esta pauta já possui uma sessão aberta.', HttpStatusCodeEnum::CONFLICT);
+            throw new ScheduleHasSessionException();
         }
 
         $schedule->sessions()->create();
@@ -41,10 +43,11 @@ class ScheduleRepository extends BaseRepository
      */
     public function closeSession(int $id)
     {
-        $schedule = $this->newQuery()->find($id);
+        /** @var Schedule $schedule */
+        $schedule = $this->findByID($id);
 
         if (is_null($schedule->currentSession)) {
-            throw new Exception('Esta pauta não possui uma sessão aberta.', HttpStatusCodeEnum::NOT_FOUND);
+            throw new ScheduleNotHasSessionException();
         }
         $schedule->currentSession()->update([
             'closed_at' => Carbon::now(),

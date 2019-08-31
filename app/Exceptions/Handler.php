@@ -2,7 +2,9 @@
 
 namespace App\Exceptions;
 
+use App\Enums\HttpStatusCodeEnum;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
@@ -46,6 +48,21 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        return parent::render($request, $exception);
+        if (
+            $exception instanceof ScheduleHasSessionException
+            || $exception instanceof ScheduleNotHasSessionException
+        ) {
+            return $exception->render($request);
+        }
+
+        if ($exception instanceof ModelNotFoundException) {
+            return response()->json([
+                'message' => 'Recurso não encontrado',
+            ], HttpStatusCodeEnum::NOT_FOUND);
+        }
+
+        return response()->json([
+            'message' => 'Erro desconhecido'
+        ], HttpStatusCodeEnum::INTERNAL_SERVER_ERROR);
     }
 }

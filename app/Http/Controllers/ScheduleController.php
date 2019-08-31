@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Enums\HttpStatusCodeEnum;
+use App\Exceptions\ScheduleHasSessionException;
+use App\Exceptions\ScheduleNotHasSessionException;
 use App\Http\Resources\ScheduleResource;
 use App\Models\Schedule;
 use App\Repositories\ScheduleRepository;
@@ -90,41 +92,31 @@ class ScheduleController extends Controller
      * @param int $id
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function openSession(int $id)
     {
-        try {
-            $schedule = $this->repository->openSession($id);
+        $schedule = $this->repository->openSession($id);
 
-            return response()->json(
-                new ScheduleResource($schedule),
-                HttpStatusCodeEnum::SUCCESS
-            );
-        } catch(Exception $exception) {
-            return response()->json([
-                'message' => $exception->getMessage()
-            ], $exception->getCode());
-        }
+        return response()->json(
+            new ScheduleResource($schedule),
+            HttpStatusCodeEnum::SUCCESS
+        );
     }
 
     /**
      * @param int $id
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function closeSession(int $id)
     {
-        try {
-            $schedule = $this->repository->closeSession($id);
+        $schedule = $this->repository->closeSession($id);
 
-            return response()->json(
-                new ScheduleResource($schedule),
-                HttpStatusCodeEnum::SUCCESS
-            );
-        } catch(Exception $exception) {
-            return response()->json([
-                'message' => $exception->getMessage()
-            ], $exception->getCode());
-        }
+        return response()->json(
+            new ScheduleResource($schedule),
+            HttpStatusCodeEnum::SUCCESS
+        );
     }
 }

@@ -6,6 +6,7 @@ use App\Repositories\Contracts\RepositoryInterface;
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Pagination\AbstractPaginator as Paginator;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -107,7 +108,7 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function update(int $id, array $data)
     {
-        return $this->newQuery()->find($id)->update($data);
+        return $this->findByID($id)->update($data);
     }
 
     /**
@@ -118,7 +119,7 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function delete(int $id)
     {
-        return $this->newQuery()->find($id)->delete();
+        return $this->findByID($id)->delete();
     }
 
     /**
@@ -128,7 +129,7 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function forceDelete(int $id)
     {
-        return $this->newQuery()->find($id)->forceDelete();
+        return $this->findByID($id)->forceDelete();
     }
 
 
