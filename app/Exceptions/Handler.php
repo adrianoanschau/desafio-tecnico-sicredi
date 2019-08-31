@@ -57,12 +57,12 @@ class Handler extends ExceptionHandler
 
         if ($exception instanceof ModelNotFoundException) {
             return response()->json([
-                'message' => 'Recurso não encontrado',
+                'message' => trans('exceptions.Resource not found'),
             ], HttpStatusCodeEnum::NOT_FOUND);
         }
 
         return response()->json([
-            'message' => 'Erro desconhecido'
+            'message' => trans('exceptions.Unknown error')
         ], HttpStatusCodeEnum::INTERNAL_SERVER_ERROR);
     }
 }

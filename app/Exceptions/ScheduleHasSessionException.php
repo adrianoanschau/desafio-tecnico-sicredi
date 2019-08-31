@@ -10,7 +10,7 @@ class ScheduleHasSessionException extends Exception
     public function render($request)
     {
         return response()->json([
-            'message' => 'Esta pauta já possui uma sessão aberta.',
+            'message' => trans('exceptions.This staff already has an open section'),
         ], HttpStatusCodeEnum::CONFLICT);
     }
 }

@@ -10,7 +10,7 @@ class ScheduleNotHasSessionException extends Exception
     public function render($request)
     {
         return response()->json([
-            'message' => 'Esta pauta não possui uma sessão aberta.',
+            'message' => trans('exceptions.This staff does not have an open session'),
         ], HttpStatusCodeEnum::NOT_FOUND);
     }
 }

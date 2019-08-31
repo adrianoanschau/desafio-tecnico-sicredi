@@ -91,7 +91,7 @@ class ScheduleTest extends TestCase
         $scheduleSession = factory(ScheduleSession::class)->create();
 
         $response = [
-            "message" => "Esta pauta já possui uma sessão aberta."
+            'message' => trans('exceptions.This staff already has an open section'),
         ];
 
         $this->put(route('schedules.openSession', [
@@ -131,7 +131,7 @@ class ScheduleTest extends TestCase
         $schedule = factory(Schedule::class)->create();
 
         $response = [
-            "message" => "Esta pauta não possui uma sessão aberta."
+            'message' => trans('exceptions.This staff does not have an open session'),
         ];
 
         $this->put(route('schedules.closeSession', [
