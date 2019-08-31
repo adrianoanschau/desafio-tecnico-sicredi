@@ -10,4 +10,6 @@ return [
     'You already voted for this session' => 'Você já votou nesta sessão',
     'System Existing Document' => 'Documento existente no sistema',
     'Validation error on uploaded data' => 'Erro de validação nos dados enviados',
+    'Invalid route' => 'Rota inválida',
+    'Method not allowed for this route' => 'Método inválido para esta rota'
 ];

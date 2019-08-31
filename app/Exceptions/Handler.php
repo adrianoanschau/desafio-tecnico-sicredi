@@ -77,13 +77,13 @@ class Handler extends ExceptionHandler
 
         if ($exception instanceof NotFoundHttpException) {
             return response()->json([
-                'message' => 'Rota inválida'
+                'message' => trans('exceptions.Invalid route')
             ], HttpStatusCodeEnum::NOT_FOUND);
         }
 
         if ($exception instanceof MethodNotAllowedHttpException) {
             return response()->json([
-                'message' => 'Método inválido para esta rota'
+                'message' => trans('exceptions.Method not allowed for this route')
             ], HttpStatusCodeEnum::METHOD_NOT_ALLOWED);
         }
 
