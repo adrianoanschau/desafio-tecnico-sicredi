@@ -7,6 +7,8 @@ use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -72,6 +74,20 @@ class Handler extends ExceptionHandler
                 'errors' => $exception->validator->errors(),
             ], HttpStatusCodeEnum::BAD_REQUEST);
         }
+
+        if ($exception instanceof NotFoundHttpException) {
+            return response()->json([
+                'message' => 'Rota inválida'
+            ], HttpStatusCodeEnum::NOT_FOUND);
+        }
+
+        if ($exception instanceof MethodNotAllowedHttpException) {
+            return response()->json([
+                'message' => 'Método inválido para esta rota'
+            ], HttpStatusCodeEnum::METHOD_NOT_ALLOWED);
+        }
+
+        dd($exception);
 
         return response()->json([
             'message' => trans('exceptions.Unknown error')
