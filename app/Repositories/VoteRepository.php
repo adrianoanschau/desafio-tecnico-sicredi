@@ -34,4 +34,17 @@ class VoteRepository extends BaseRepository
         ];
     }
 
+    /**
+     * @param Schedule $schedule
+     *
+     * @return mixed
+     */
+    public function getAllVotes(Schedule $schedule)
+    {
+        return $schedule->sessions->map(function (ScheduleSession $session) {
+            return $session->votes;
+        })->flatten();
+
+    }
+
 }

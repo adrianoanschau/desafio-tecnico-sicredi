@@ -23,6 +23,9 @@ Route::prefix('v1')->group(function (){
     Route::put('schedules/{id}/vote', 'ScheduleController@vote')
         ->name('schedules.vote');
 
-    Route::get('votes', 'VoteController@result');
+    Route::resource('votes', 'VoteController')->only([
+        'index'
+    ]);
+    Route::get('votes/result', 'VoteController@result')->name('votes.result');
 
 });

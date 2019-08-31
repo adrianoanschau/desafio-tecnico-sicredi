@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Enums\HttpStatusCodeEnum;
 use App\Http\Requests\VoteResultRequest;
+use App\Http\Resources\VoteResource;
+use App\Models\Schedule;
 use App\Repositories\ScheduleRepository;
 use App\Repositories\VoteRepository;
 use Illuminate\Http\JsonResponse;
@@ -32,10 +34,26 @@ class VoteController extends Controller
      * @param VoteResultRequest $request
      *
      * @return JsonResponse
+     */
+    public function index(VoteResultRequest $request)
+    {
+        /** @var Schedule $schedule */
+        $schedule = $this->scheduleRepository->findByID($request->input('schedule_id'));
+
+        $votes = $this->repository->getAllVotes($schedule);
+
+        return response()->json(VoteResource::collection($votes), HttpStatusCodeEnum::SUCCESS);
+    }
+
+    /**
+     * @param VoteResultRequest $request
+     *
+     * @return JsonResponse
      * @throws Exception
      */
     public function result(VoteResultRequest $request)
     {
+        /** @var Schedule $schedule */
         $schedule = $this->scheduleRepository->findByID($request->input('schedule_id'));
 
         $result = $this->repository->getResult($schedule);
