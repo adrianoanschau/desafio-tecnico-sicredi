@@ -2,8 +2,11 @@
 
 namespace App\Repositories;
 
+use App\Enums\VoteOptionEnum;
+use App\Exceptions\InvalidVoteOptionException;
 use App\Exceptions\ScheduleHasSessionException;
 use App\Exceptions\ScheduleNotHasSessionException;
+use App\Models\Associate;
 use App\Models\Schedule;
 use Carbon\Carbon;
 use Exception;
@@ -58,6 +61,42 @@ class ScheduleRepository extends BaseRepository
         $schedule->currentSession()->update([
             'closed_at' => Carbon::now(),
         ]);
+        $schedule->refresh();
+
+        return $schedule;
+    }
+
+    /**
+     * @param int $id
+     * @param array $data
+     *
+     * @return Schedule
+     * @throws InvalidVoteOptionException
+     * @throws ScheduleNotHasSessionException
+     */
+    public function vote(int $id, array $data)
+    {
+        /** @var Associate $associate */
+        $associate = $data['associate'];
+
+        $option = $data['option'];
+
+        if ($option !== VoteOptionEnum::YES && $option !== VoteOptionEnum::NO) {
+            throw new InvalidVoteOptionException();
+        }
+
+        /** @var Schedule $schedule */
+        $schedule = $this->findByID($id);
+
+        if (is_null($schedule->currentSession)) {
+            throw new ScheduleNotHasSessionException();
+        }
+
+        $schedule->currentSession->votes()->create([
+            'associate_id' => $associate->id,
+            'option' => $option,
+        ]);
+
         $schedule->refresh();
 
         return $schedule;

@@ -3,12 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Enums\HttpStatusCodeEnum;
-use App\Exceptions\ScheduleHasSessionException;
 use App\Exceptions\ScheduleNotHasSessionException;
+use App\Exceptions\InvalidVoteOptionException;
 use App\Http\Resources\ScheduleResource;
-use App\Models\Schedule;
+use App\Repositories\AssociateRepository;
 use App\Repositories\ScheduleRepository;
-use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Exception;
 use Illuminate\Http\Request;
@@ -18,14 +17,19 @@ class ScheduleController extends Controller
     /** @var ScheduleRepository */
     private $repository;
 
+    /** @var AssociateRepository */
+    private $associateRepository;
+
     /**
      * ScheduleController constructor.
      *
      * @param ScheduleRepository $repository
+     * @param AssociateRepository $associateRepository
      */
-    public function __construct(ScheduleRepository $repository)
+    public function __construct(ScheduleRepository $repository, AssociateRepository $associateRepository)
     {
         $this->repository = $repository;
+        $this->associateRepository = $associateRepository;
     }
 
     /**
@@ -115,6 +119,28 @@ class ScheduleController extends Controller
     public function closeSession(int $id)
     {
         $schedule = $this->repository->closeSession($id);
+
+        return response()->json(
+            new ScheduleResource($schedule),
+            HttpStatusCodeEnum::SUCCESS
+        );
+    }
+
+    /**
+     * @param Request $request
+     * @param int $id
+     *
+     * @return JsonResponse
+     * @throws ScheduleNotHasSessionException
+     * @throws InvalidVoteOptionException
+     */
+    public function vote(Request $request, int $id)
+    {
+        $associate = $this->associateRepository->findByID($request->input('associate_id'));
+        $schedule = $this->repository->vote($id, [
+            'associate' => $associate,
+            'option' => $request->input('option'),
+        ]);
 
         return response()->json(
             new ScheduleResource($schedule),

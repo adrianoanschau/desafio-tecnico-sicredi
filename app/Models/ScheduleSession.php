@@ -32,4 +32,9 @@ class ScheduleSession extends Model
     {
         return $this->belongsTo(Schedule::class);
     }
+
+    public function votes()
+    {
+        return $this->hasMany(Vote::class);
+    }
 }

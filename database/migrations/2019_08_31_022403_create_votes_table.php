@@ -17,9 +17,13 @@ class CreateVotesTable extends Migration
             $table->bigIncrements('id');
             $table->enum('option', ['Y', 'N']);
             $table->unsignedBigInteger('associate_id');
+            $table->unsignedBigInteger('schedule_session_id');
             $table->foreign('associate_id')
                 ->references('id')
                 ->on('associates');
+            $table->foreign('schedule_session_id')
+                ->references('id')
+                ->on('schedule_sessions');
             $table->softDeletes();
             $table->timestamps();
         });

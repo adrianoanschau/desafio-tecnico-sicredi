@@ -51,6 +51,7 @@ class Handler extends ExceptionHandler
         if (
             $exception instanceof ScheduleHasSessionException
             || $exception instanceof ScheduleNotHasSessionException
+            || $exception instanceof InvalidVoteOptionException
         ) {
             return $exception->render($request);
         }
@@ -60,6 +61,8 @@ class Handler extends ExceptionHandler
                 'message' => trans('exceptions.Resource not found'),
             ], HttpStatusCodeEnum::NOT_FOUND);
         }
+
+        dd($exception);
 
         return response()->json([
             'message' => trans('exceptions.Unknown error')

@@ -29,3 +29,5 @@ Route::put('schedules/{id}/openSession', 'ScheduleController@openSession')
     ->name('schedules.openSession');
 Route::put('schedules/{id}/closeSession', 'ScheduleController@closeSession')
     ->name('schedules.closeSession');
+Route::put('schedules/{id}/vote', 'ScheduleController@vote')
+    ->name('schedules.vote');

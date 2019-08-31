@@ -12,7 +12,8 @@ class Vote extends Model
 
     /** @var array */
     protected $fillable = [
-        'option'
+        'option',
+        'associate_id'
     ];
 
     /**
@@ -21,5 +22,13 @@ class Vote extends Model
     public function associate()
     {
         return $this->belongsTo(Associate::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function session()
+    {
+        return $this->belongsTo(ScheduleSession::class, 'schedule_session_id');
     }
 }
