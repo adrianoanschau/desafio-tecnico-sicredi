@@ -87,8 +87,6 @@ class Handler extends ExceptionHandler
             ], HttpStatusCodeEnum::METHOD_NOT_ALLOWED);
         }
 
-        dd($exception);
-
         return response()->json([
             'message' => trans('exceptions.Unknown error')
         ], HttpStatusCodeEnum::INTERNAL_SERVER_ERROR);

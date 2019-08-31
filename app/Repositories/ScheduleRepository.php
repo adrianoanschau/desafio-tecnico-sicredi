@@ -93,10 +93,6 @@ class ScheduleRepository extends BaseRepository
 
         $option = $data['option'];
 
-        if ($option !== VoteOptionEnum::YES && $option !== VoteOptionEnum::NO) {
-            throw new InvalidVoteOptionException();
-        }
-
         /** @var Schedule $schedule */
         $schedule = $this->findByID($id);
 

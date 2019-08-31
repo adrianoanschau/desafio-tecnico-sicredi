@@ -122,6 +122,30 @@ class ScheduleTest extends TestCase
             ->assertJson($response);
     }
 
+    public function testCanNotOpenScheduleSessionWhenAnotherIsClosed()
+    {
+        /** @var Schedule $schedule */
+        $schedule = factory(Schedule::class)->create();
+
+        $this->put(route('schedules.openSession', [
+            'schedule' => $schedule->id,
+        ]), []);
+
+        $this->put(route('schedules.closeSession', [
+            'schedule' => $schedule->id,
+        ]), []);
+
+        $response = [
+            'message' => trans('exceptions.This schedule is already over'),
+        ];
+
+        $this->put(route('schedules.openSession', [
+            'schedule' => $schedule->id,
+        ]), [])
+            ->assertStatus(HttpStatusCodeEnum::FORBIDDEN)
+            ->assertJson($response);
+    }
+
     public function testCanCloseScheduleSession()
     {
         /** @var Schedule $schedule */
@@ -241,5 +265,64 @@ class ScheduleTest extends TestCase
         ])
             ->assertStatus(HttpStatusCodeEnum::SUCCESS)
             ->assertJson($expected);
+    }
+
+    public function testCanNotVoteWithInvalidOption()
+    {
+        /** @var Schedule $schedule */
+        $schedule = factory(Schedule::class)->create();
+
+        $this->put(route('schedules.openSession', [
+            'schedule' => $schedule->id,
+        ]), []);
+
+        $schedule->refresh();
+        $associate = factory(Associate::class)->create();
+
+        $expected = [
+            'message' => trans('exceptions.Validation error on uploaded data'),
+        ];
+
+        $this->put(route('schedules.vote', [
+            'schedule' => $schedule->id,
+        ]), [
+            'option' => 'S',
+            'associate_id' => $associate->id
+        ])
+            ->assertStatus(HttpStatusCodeEnum::BAD_REQUEST)
+            ->assertJson($expected);
+    }
+
+    public function testCanNotVoteInScheduleSessionWhenAlreadyVote()
+    {
+        /** @var Schedule $schedule */
+        $schedule = factory(Schedule::class)->create();
+
+        $this->put(route('schedules.openSession', [
+            'schedule' => $schedule->id,
+        ]), []);
+
+        $schedule->refresh();
+        $associate = factory(Associate::class)->create();
+
+        $this->put(route('schedules.vote', [
+            'schedule' => $schedule->id,
+        ]), [
+            'option' => 'Y',
+            'associate_id' => $associate->id
+        ]);
+
+        $response = [
+            'message' => trans('exceptions.You already voted for this session'),
+        ];
+
+        $this->put(route('schedules.vote', [
+            'schedule' => $schedule->id,
+        ]), [
+            'option' => 'Y',
+            'associate_id' => $associate->id
+        ])
+            ->assertStatus(HttpStatusCodeEnum::FORBIDDEN)
+            ->assertJson($response);
     }
 }

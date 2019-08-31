@@ -68,4 +68,22 @@ class AssociateTest extends TestCase
                 '*' =>[ 'id', 'name', 'document' ]
             ]);
     }
+
+    public function testCanNotCreateAssociateWithExistentDocument()
+    {
+        $data = [
+            'name' => $this->faker->name,
+            'document' => $this->faker->cpf,
+        ];
+
+        $this->post(route('associates.store'), $data);
+
+        $response = [
+            'message' => trans('exceptions.System Existing Document'),
+        ];
+
+        $this->post(route('associates.store'), $data)
+            ->assertStatus(HttpStatusCodeEnum::FORBIDDEN)
+            ->assertJson($response);
+    }
 }
