@@ -6,5 +6,7 @@ return [
     'Resource not found' => 'Recurso não encontrado',
     'Unknown error' => 'Erro desconhecido',
     'Invalid voting option. (allowed options: \'Y\' and \'N\')' => 'Opção inválida de voto. (opções permitidas: \'Y\' e \'N\')',
-    'This schedule is already over' => 'Esta pauta já teve sua sessão encerrada'
+    'This schedule is already over' => 'Esta pauta já teve sua sessão encerrada',
+    'You already voted for this session' => 'Você já votou nesta sessão',
+    'System Existing Document' => 'Documento existente no sistema',
 ];

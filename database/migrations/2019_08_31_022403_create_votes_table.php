@@ -24,6 +24,7 @@ class CreateVotesTable extends Migration
             $table->foreign('schedule_session_id')
                 ->references('id')
                 ->on('schedule_sessions');
+            $table->unique(['associate_id', 'schedule_session_id']);
             $table->softDeletes();
             $table->timestamps();
         });

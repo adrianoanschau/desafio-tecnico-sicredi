@@ -7,11 +7,15 @@ use App\Exceptions\InvalidVoteOptionException;
 use App\Exceptions\ScheduleHasSessionException;
 use App\Exceptions\ScheduleNotHasSessionException;
 use App\Exceptions\ScheduleSessionIsClosedException;
+use App\Exceptions\UniqueVotePerSessionException;
 use App\Models\Associate;
 use App\Models\Schedule;
+use App\Models\Vote;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Collection;
 
 class ScheduleRepository extends BaseRepository
 {
@@ -80,6 +84,7 @@ class ScheduleRepository extends BaseRepository
      * @throws InvalidVoteOptionException
      * @throws ScheduleSessionIsClosedException
      * @throws ScheduleNotHasSessionException
+     * @throws UniqueVotePerSessionException
      */
     public function vote(int $id, array $data)
     {
@@ -102,6 +107,16 @@ class ScheduleRepository extends BaseRepository
             }
 
             throw new ScheduleNotHasSessionException();
+        }
+
+        /** @var Collection $votesFromThisAssociate */
+        $votesFromThisAssociate = $schedule->currentSession->votes
+            ->filter(function (Vote $vote) use ($associate) {
+                return $vote->associate->id === $associate->id;
+            });
+
+        if ($votesFromThisAssociate->isNotEmpty()) {
+            throw new UniqueVotePerSessionException();
         }
 
         $schedule->currentSession->votes()->create([

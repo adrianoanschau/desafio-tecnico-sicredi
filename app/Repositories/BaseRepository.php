@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Exceptions\UniqueDocumentAssociateException;
 use App\Repositories\Contracts\RepositoryInterface;
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
