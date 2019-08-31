@@ -20,6 +20,11 @@ class ScheduleSession extends Model
         'closed_at'
     ];
 
+    /** @var array  */
+    protected $casts = [
+        'opening_time' => 'integer'
+    ];
+
     /**
      * @return BelongsTo
      */

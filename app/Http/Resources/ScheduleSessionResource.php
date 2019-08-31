@@ -20,7 +20,7 @@ class ScheduleSessionResource extends JsonResource
         $session = $this;
         return [
             'id' => $session->id,
-            'opening_time' => $session->opening_time,
+            'time' => $session->opening_time,
             'opened_at' => $session->opened_at,
             'closed_at' => $session->closed_at,
         ];

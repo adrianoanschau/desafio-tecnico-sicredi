@@ -11,6 +11,7 @@ use App\Repositories\ScheduleRepository;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Exception;
+use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
 {
@@ -89,14 +90,15 @@ class ScheduleController extends Controller
     }
 
     /**
+     * @param Request $request
      * @param int $id
      *
      * @return JsonResponse
      * @throws Exception
      */
-    public function openSession(int $id)
+    public function openSession(Request $request, int $id)
     {
-        $schedule = $this->repository->openSession($id);
+        $schedule = $this->repository->openSession($id, $request->input('time'));
 
         return response()->json(
             new ScheduleResource($schedule),

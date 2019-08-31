@@ -85,6 +85,26 @@ class ScheduleTest extends TestCase
             ->assertJson($resource);
     }
 
+    public function testCanOpenScheduleSessionWithCustomTime()
+    {
+        $customTime = 600;
+
+        /** @var Schedule $schedule */
+        $schedule = factory(Schedule::class)->create();
+
+        $resource = (new ScheduleResource($schedule))->resolve();
+
+        $this->put(route('schedules.openSession', [
+            'schedule' => $schedule->id,
+            'time' => $customTime
+        ]), [])
+            ->assertStatus(HttpStatusCodeEnum::SUCCESS)
+            ->assertJson($resource);
+
+        $scheduleStored = Schedule::find($schedule->id);
+        $this->assertEquals($customTime, $scheduleStored->currentSession->opening_time);
+    }
+
     public function testCanNotOpenScheduleSessionWhenAnotherIsOpened()
     {
         /** @var ScheduleSession $scheduleSession */

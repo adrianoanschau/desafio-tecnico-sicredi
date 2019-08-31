@@ -16,11 +16,12 @@ class ScheduleRepository extends BaseRepository
 
     /**
      * @param int $id
+     * @param int|null $time
      *
-     * @return Model
-     * @throws Exception
+     * @return Schedule
+     * @throws ScheduleHasSessionException
      */
-    public function openSession(int $id)
+    public function openSession(int $id, int $time = null)
     {
         /** @var Schedule $schedule */
         $schedule = $this->findByID($id);
@@ -29,7 +30,12 @@ class ScheduleRepository extends BaseRepository
             throw new ScheduleHasSessionException();
         }
 
-        $schedule->sessions()->create();
+        $data = [];
+        if (!is_null($time)) {
+            $data['opening_time'] = $time;
+        }
+
+        $schedule->sessions()->create($data);
         $schedule->refresh();
 
         return $schedule;
