@@ -325,4 +325,60 @@ class ScheduleTest extends TestCase
             ->assertStatus(HttpStatusCodeEnum::FORBIDDEN)
             ->assertJson($response);
     }
+
+    public function testCanNotVoteInScheduleSessionWhenNotHasSessionOpened()
+    {
+        /** @var Schedule $schedule */
+        $schedule = factory(Schedule::class)->create();
+
+        $associateData = [
+            'name' => $this->faker->name,
+            'document' => $this->faker->cpf,
+        ];
+
+        $response = [
+            'message' => trans('exceptions.This staff does not have an open session'),
+        ];
+
+        $this->put(route('schedules.vote', [
+            'schedule' => $schedule->id,
+        ]), [
+            'option' => 'Y',
+            'associate' => $associateData
+        ])
+            ->assertStatus(HttpStatusCodeEnum::NOT_FOUND)
+            ->assertJson($response);
+    }
+
+    public function testCanNotVoteInScheduleSessionWhenHasSessionClosed()
+    {
+        /** @var Schedule $schedule */
+        $schedule = factory(Schedule::class)->create();
+
+        $this->put(route('schedules.openSession', [
+            'schedule' => $schedule->id,
+        ]), []);
+
+        $this->put(route('schedules.closeSession', [
+            'schedule' => $schedule->id,
+        ]), []);
+
+        $associateData = [
+            'name' => $this->faker->name,
+            'document' => $this->faker->cpf,
+        ];
+
+        $response = [
+            'message' => trans('exceptions.This schedule is already over'),
+        ];
+
+        $this->put(route('schedules.vote', [
+            'schedule' => $schedule->id,
+        ]), [
+            'option' => 'Y',
+            'associate' => $associateData
+        ])
+            ->assertStatus(HttpStatusCodeEnum::FORBIDDEN)
+            ->assertJson($response);
+    }
 }
