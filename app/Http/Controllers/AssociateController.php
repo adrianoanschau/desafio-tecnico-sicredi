@@ -10,6 +10,10 @@ use App\Repositories\AssociateRepository;
 use Illuminate\Http\JsonResponse;
 use Exception;
 
+/**
+ * Class AssociateController
+ * @package App\Http\Controllers
+ */
 class AssociateController extends Controller
 {
     /** @var AssociateRepository */
@@ -25,6 +29,23 @@ class AssociateController extends Controller
     }
 
     /**
+     * @OA\Get(
+     *     path="/api/v1/associates",
+     *     tags={"Listar"},
+     *     summary="Listar Associados",
+     *     operationId="associateList",
+     *
+     *     @OA\Response(
+     *          response=200,
+     *          description="Sucesso",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     * )
+     */
+
+     /**
      * @return JsonResponse
      */
     public function index()
@@ -38,6 +59,31 @@ class AssociateController extends Controller
     }
 
     /**
+     * @OA\Get(
+     *     path="/api/v1/associates/1",
+     *     tags={"Exibir"},
+     *     summary="Exibir um Associado",
+     *     operationId="associateShow",
+     *
+     *     @OA\Response(
+     *          response=200,
+     *          description="Sucesso",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     *
+     *     @OA\Response(
+     *          response=404,
+     *          description="Associado não Encontrado",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     * )
+     */
+
+    /**
      * @param int $id
      *
      * @return JsonResponse
@@ -48,6 +94,60 @@ class AssociateController extends Controller
 
         return response()->json(new AssociateResource($associate), HttpStatusCodeEnum::SUCCESS);
     }
+
+    /**
+     * @OA\Post(
+     *     path="/api/v1/associates",
+     *     tags={"Cadastrar"},
+     *     summary="Cadastrar um Associado",
+     *     operationId="associateStore",
+     *
+     *      @OA\Parameter(
+     *          name="name",
+     *          in="query",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="string",
+     *              minLength=3,
+     *          )
+     *      ),
+     *
+     *      @OA\Parameter(
+     *          name="document",
+     *          in="query",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="string",
+     *              minLength=11,
+     *              maxLength=11,
+     *          )
+     *      ),
+     *
+     *     @OA\Response(
+     *          response=200,
+     *          description="Sucesso",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     *
+     *     @OA\Response(
+     *          response=400,
+     *          description="Dados inválidos",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     *
+     *     @OA\Response(
+     *          response=403,
+     *          description="Documento já cadastrado",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     * )
+     */
 
     /**
      * @param StoreAssociateRequest $request
@@ -63,6 +163,66 @@ class AssociateController extends Controller
     }
 
     /**
+     * @OA\Put(
+     *     path="/api/v1/associates/1",
+     *     tags={"Atualizar"},
+     *     summary="Atualizar um Associado",
+     *     operationId="associateUpdate",
+     *
+     *      @OA\Parameter(
+     *          name="name",
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string",
+     *              minLength=3,
+     *          )
+     *      ),
+     *
+     *      @OA\Parameter(
+     *          name="document",
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string",
+     *              minLength=11,
+     *              maxLength=11,
+     *          )
+     *      ),
+     *
+     *     @OA\Response(
+     *          response=200,
+     *          description="Sucesso",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     *
+     *     @OA\Response(
+     *          response=400,
+     *          description="Dados inválidos",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     *
+     *     @OA\Response(
+     *          response=403,
+     *          description="Documento já cadastrado",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     *
+     *     @OA\Response(
+     *          response=404,
+     *          description="Associado não Encontrado",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     * )
+     */
+
+    /**
      * @param UpdateAssociateRequest $request
      * @param int $id
      *
@@ -75,6 +235,31 @@ class AssociateController extends Controller
 
         return response()->json(new AssociateResource($associate), HttpStatusCodeEnum::SUCCESS);
     }
+
+    /**
+     * @OA\Delete(
+     *     path="/api/v1/associates/1",
+     *     tags={"Excluir"},
+     *     summary="Excluir um Associado",
+     *     operationId="associateDestroy",
+     *
+     *     @OA\Response(
+     *          response=204,
+     *          description="Sucesso",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     *
+     *     @OA\Response(
+     *          response=404,
+     *          description="Associado não Encontrado",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     * )
+     */
 
     /**
      * @param int $id

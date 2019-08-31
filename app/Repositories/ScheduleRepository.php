@@ -81,7 +81,6 @@ class ScheduleRepository extends BaseRepository
      * @param array $data
      *
      * @return Schedule
-     * @throws InvalidVoteOptionException
      * @throws ScheduleSessionIsClosedException
      * @throws ScheduleNotHasSessionException
      * @throws UniqueVotePerSessionException

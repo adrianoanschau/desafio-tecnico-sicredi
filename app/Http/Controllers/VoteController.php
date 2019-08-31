@@ -11,6 +11,10 @@ use App\Repositories\VoteRepository;
 use Illuminate\Http\JsonResponse;
 use Exception;
 
+/**
+ * Class VoteController
+ * @package App\Http\Controllers
+ */
 class VoteController extends Controller
 {
     /** @var VoteRepository */
@@ -31,6 +35,40 @@ class VoteController extends Controller
     }
 
     /**
+     * @OA\Get(
+     *     path="/api/v1/votes",
+     *     tags={"Listar"},
+     *     summary="Listar votos de uma Pauta",
+     *     operationId="voteList",
+     *
+     *      @OA\Parameter(
+     *          name="schedule_id",
+     *          in="query",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *
+     *     @OA\Response(
+     *          response=200,
+     *          description="Sucesso",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     *
+     *     @OA\Response(
+     *          response=404,
+     *          description="Pauta não encontrado",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     * )
+     */
+
+    /**
      * @param VoteResultRequest $request
      *
      * @return JsonResponse
@@ -44,6 +82,40 @@ class VoteController extends Controller
 
         return response()->json(VoteResource::collection($votes), HttpStatusCodeEnum::SUCCESS);
     }
+
+    /**
+     * @OA\Get(
+     *     path="/api/v1/votes/result",
+     *     tags={"Exibir"},
+     *     summary="Exibe contagem de votos de uma Pauta",
+     *     operationId="voteResult",
+     *
+     *      @OA\Parameter(
+     *          name="schedule_id",
+     *          in="query",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *
+     *     @OA\Response(
+     *          response=200,
+     *          description="Sucesso",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     *
+     *     @OA\Response(
+     *          response=404,
+     *          description="Pauta não Encontrada",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     * )
+     */
 
     /**
      * @param VoteResultRequest $request

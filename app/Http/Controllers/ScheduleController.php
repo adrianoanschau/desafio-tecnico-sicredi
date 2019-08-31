@@ -35,6 +35,23 @@ class ScheduleController extends Controller
     }
 
     /**
+     * @OA\Get(
+     *     path="/api/v1/schedules",
+     *     tags={"Listar"},
+     *     summary="Listar Pautas",
+     *     operationId="scheduleList",
+     *
+     *     @OA\Response(
+     *          response=200,
+     *          description="Sucesso",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     * )
+     */
+
+    /**
      * @return JsonResponse
      */
     public function index()
@@ -46,6 +63,31 @@ class ScheduleController extends Controller
             HttpStatusCodeEnum::SUCCESS
         );
     }
+
+    /**
+     * @OA\Get(
+     *     path="/api/v1/schedules/1",
+     *     tags={"Exibir"},
+     *     summary="Exibir uma Pauta",
+     *     operationId="scheduleShow",
+     *
+     *     @OA\Response(
+     *          response=200,
+     *          description="Sucesso",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     *
+     *     @OA\Response(
+     *          response=404,
+     *          description="Pauta não Encontrada",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     * )
+     */
 
     /**
      * @param int $id
@@ -60,6 +102,49 @@ class ScheduleController extends Controller
     }
 
     /**
+     * @OA\Post(
+     *     path="/api/v1/schedules",
+     *     tags={"Cadastrar"},
+     *     summary="Cadastrar uma Pauta",
+     *     operationId="scheduleStore",
+     *
+     *      @OA\Parameter(
+     *          name="title",
+     *          in="query",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="string",
+     *              minLength=3,
+     *          )
+     *      ),
+     *
+     *      @OA\Parameter(
+     *          name="description",
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string",
+     *          )
+     *      ),
+     *
+     *     @OA\Response(
+     *          response=200,
+     *          description="Sucesso",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     *
+     *     @OA\Response(
+     *          response=400,
+     *          description="Dados inválidos",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     * )
+     */
+
+    /**
      * @param StoreScheduleRequest $request
      *
      * @return JsonResponse
@@ -70,6 +155,56 @@ class ScheduleController extends Controller
 
         return response()->json(new ScheduleResource($schedule), HttpStatusCodeEnum::CREATED);
     }
+
+    /**
+     * @OA\Put(
+     *     path="/api/v1/schedules/1",
+     *     tags={"Atualizar"},
+     *     summary="Atualizar uma Pauta",
+     *     operationId="scheduleUpdate",
+     *
+     *      @OA\Parameter(
+     *          name="title",
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string",
+     *              minLength=3,
+     *          )
+     *      ),
+     *
+     *      @OA\Parameter(
+     *          name="description",
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string",
+     *          )
+     *      ),
+     *
+     *     @OA\Response(
+     *          response=200,
+     *          description="Sucesso",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     *
+     *     @OA\Response(
+     *          response=400,
+     *          description="Dados inválidos",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     *
+     *     @OA\Response(
+     *          response=404,
+     *          description="Não Encontrado",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     * )
+     */
 
     /**
      * @param UpdateScheduleRequest $request
@@ -86,6 +221,31 @@ class ScheduleController extends Controller
     }
 
     /**
+     * @OA\Delete(
+     *     path="/api/v1/schedules/1",
+     *     tags={"Excluir"},
+     *     summary="Excluir uma Pauta",
+     *     operationId="scheduleDestroy",
+     *
+     *     @OA\Response(
+     *          response=204,
+     *          description="Sucesso",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     *
+     *     @OA\Response(
+     *          response=404,
+     *          description="Pauta não Encontrada",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     * )
+     */
+
+    /**
      * @param int $id
      *
      * @return JsonResponse
@@ -97,6 +257,55 @@ class ScheduleController extends Controller
 
         return response()->json(null, HttpStatusCodeEnum::NO_CONTENT);
     }
+
+    /**
+     * @OA\Put(
+     *     path="/api/v1/schedules/1/openSession",
+     *     tags={"Atualizar"},
+     *     summary="Abrir Sessão de Votação",
+     *     operationId="scheduleOpenSession",
+     *
+     *     @OA\Response(
+     *          response=204,
+     *          description="Sucesso",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     *
+     *     @OA\Response(
+     *          response=400,
+     *          description="Dados inválidos",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     *
+     *     @OA\Response(
+     *          response=409,
+     *          description="Já existe sessão aberta para a Pauta",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     *
+     *     @OA\Response(
+     *          response=403,
+     *          description="Pauta com sessão já encerrada",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     *
+     *     @OA\Response(
+     *          response=404,
+     *          description="Pauta não Encontrada",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     * )
+     */
 
     /**
      * @param OpenScheduleSessionRequest $request
@@ -116,6 +325,47 @@ class ScheduleController extends Controller
     }
 
     /**
+     * @OA\Put(
+     *     path="/api/v1/schedules/1/closeSession",
+     *     tags={"Atualizar"},
+     *     summary="Fechar Sessão de Votação",
+     *     operationId="scheduleCloseSession",
+     *
+     *     @OA\Response(
+     *          response=204,
+     *          description="Sucesso",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     *
+     *     @OA\Response(
+     *          response=400,
+     *          description="Dados inválidos",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     *
+     *     @OA\Response(
+     *          response=403,
+     *          description="Pauta com sessão já encerrada",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     *
+     *     @OA\Response(
+     *          response=404,
+     *          description="Pauta não Encontrada",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     * )
+     */
+
+    /**
      * @param int $id
      *
      * @return JsonResponse
@@ -130,6 +380,47 @@ class ScheduleController extends Controller
             HttpStatusCodeEnum::SUCCESS
         );
     }
+
+    /**
+     * @OA\Put(
+     *     path="/api/v1/schedules/1/vote",
+     *     tags={"Atualizar"},
+     *     summary="Votar em uma Sessão de Votação",
+     *     operationId="scheduleVote",
+     *
+     *     @OA\Response(
+     *          response=204,
+     *          description="Sucesso",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     *
+     *     @OA\Response(
+     *          response=400,
+     *          description="Dados inválidos",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     *
+     *     @OA\Response(
+     *          response=404,
+     *          description="Não existe sessão aberta para a Pauta | Pauta não encontrada",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     *
+     *     @OA\Response(
+     *          response=403,
+     *          description="Pauta com sessão já encerrada",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *     ),
+     * )
+     */
 
     /**
      * @param VoteScheduleSessionRequest $request
