@@ -8,7 +8,7 @@ return [
         |--------------------------------------------------------------------------
         */
 
-        'title' => 'L5 Swagger UI',
+        'title' => 'Desafio Técnioo Sicredi | Documentação da API',
     ],
 
     'routes' => [
