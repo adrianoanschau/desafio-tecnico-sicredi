@@ -11,10 +11,16 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
  * @OA\Info(
  *     title="Desafio Técnico Sicredi",
  *     description="Aplicação de Votação",
- *     contact="Adriano Anschau <adrianoanschau@gmail.com>",
  *     version="1.0.0",
+ *     @OA\Contact(
+ *         name="Adriano Anschau",
+ *         email="<adrianoanschau@gmail.com>",
+ *     )
  * )
  *
+ * @OA\Server(
+ *     url="https://desafio-tecnico-sicredi.herokuapp.com/api/v1",
+ * )
  *
  * Class Controller
  * @package App\Http\Controllers
