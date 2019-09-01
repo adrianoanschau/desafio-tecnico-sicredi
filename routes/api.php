@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
 //    return $request->user();
 //});
 
-Route::prefix('v1')->group(function (){
+Route::prefix('v1')->namespace('v1')->group(function (){
 
     Route::resource('associates', 'AssociateController')->only([
         'index', 'show', 'store', 'update', 'destroy'
