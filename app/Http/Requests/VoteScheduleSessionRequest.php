@@ -26,7 +26,7 @@ class VoteScheduleSessionRequest extends FormRequest
         return [
             'option' => 'required|string|in:Y,N',
             'associate_id' => 'required_without:associate.document|exists:associates,id',
-            'associate.document' => 'required_without:associate_id|string|size:11',
+            'associate.document' => 'required_without:associate_id|cpf',
             'associate.name' => 'string|min:3'
         ];
     }

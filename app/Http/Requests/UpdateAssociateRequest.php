@@ -25,7 +25,7 @@ class UpdateAssociateRequest extends FormRequest
     {
         return [
             'name' => 'min:3',
-            'document' => 'size:11'
+            'document' => 'cpf'
         ];
     }
 }
