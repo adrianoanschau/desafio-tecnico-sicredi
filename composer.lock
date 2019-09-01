@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ca74ec8c123bc3bfc3ab812f1379116b",
+    "content-hash": "61cc0f065841b996213b0f95e7ec3a1a",
     "packages": [
         {
             "name": "bensampo/laravel-enum",
@@ -626,6 +626,47 @@
                 "fixtures"
             ],
             "time": "2018-07-12T10:23:15+00:00"
+        },
+        {
+            "name": "geekcom/validator-docs",
+            "version": "1.5.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/geekcom/validator-docs.git",
+                "reference": "48e70a253d67c1b81341e93fdfd1e3b2e629a633"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/geekcom/validator-docs/zipball/48e70a253d67c1b81341e93fdfd1e3b2e629a633",
+                "reference": "48e70a253d67c1b81341e93fdfd1e3b2e629a633",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "5.*"
+            },
+            "require-dev": {
+                "laravel/framework": "5.*",
+                "laravel/laravel": "5.0.*",
+                "phpunit/phpunit": "^7.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "geekcom\\ValidatorDocs\\": "src/validator-docs"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Daniel Rodrigues Lima",
+                    "email": "danielrodrigues-ti@hotmail.com"
+                }
+            ],
+            "description": "Biblioteca para validação de Título de Eleitor, CPF, CNPJ, NIS e CNH",
+            "time": "2019-08-14T14:53:44+00:00"
         },
         {
             "name": "hanneskod/classtools",

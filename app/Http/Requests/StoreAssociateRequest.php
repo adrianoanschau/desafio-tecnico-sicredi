@@ -25,7 +25,7 @@ class StoreAssociateRequest extends FormRequest
     {
         return [
             'name' => 'required|string|min:3',
-            'document' => 'required|string|size:11'
+            'document' => 'required|cpf'
         ];
     }
 }

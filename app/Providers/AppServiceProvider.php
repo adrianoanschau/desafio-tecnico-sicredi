@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\ScheduleSession;
 use App\Observers\ScheduleSessionObserver;
+use geekcom\ValidatorDocs\ValidatorProvider;
 use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Support\ServiceProvider;
 use L5Swagger\L5SwaggerServiceProvider;
@@ -18,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->register(L5SwaggerServiceProvider::class);
+        $this->app->register(ValidatorProvider::class);
     }
 
     /**
