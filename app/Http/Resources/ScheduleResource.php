@@ -26,6 +26,7 @@ class ScheduleResource extends JsonResource
                 !is_null($schedule->currentSession),
                 new ScheduleSessionResource($schedule->currentSession)
             ),
+            'sessions' => ScheduleSessionResource::collection($this->sessions),
         ];
     }
 }
