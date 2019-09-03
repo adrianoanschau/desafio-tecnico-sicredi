@@ -23,6 +23,16 @@ class ScheduleRepository extends BaseRepository
     protected $modelClass = Schedule::class;
 
     /**
+     * @param int $take
+     * @param bool $paginate
+     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Pagination\AbstractPaginator|void
+     */
+    public function getAll(int $take = 15, bool $paginate = true)
+    {
+        return $this->doQuery($this->newQuery()->orderBy('created_at', 'DESC'), $take, $paginate);
+    }
+
+    /**
      * @param int $id
      * @param int|null $time
      *
