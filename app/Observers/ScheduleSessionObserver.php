@@ -3,9 +3,21 @@
 namespace App\Observers;
 
 use App\Models\ScheduleSession;
+use Carbon\Carbon;
 
 class ScheduleSessionObserver
 {
+    /**
+     * Handle the schedule session "creating" event.
+     *
+     * @param  ScheduleSession  $scheduleSession
+     * @return void
+     */
+    public function creating(ScheduleSession $scheduleSession)
+    {
+        $scheduleSession->opened_at = Carbon::now();
+    }
+
     /**
      * Handle the schedule session "created" event.
      *

@@ -17,7 +17,7 @@ class CreateScheduleSessionsTable extends Migration
         Schema::create('schedule_sessions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('opening_time')->default(60);
-            $table->dateTime('opened_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->dateTime('opened_at');
             $table->dateTime('closed_at')->nullable();
             $table->unsignedBigInteger('schedule_id');
             $table->foreign('schedule_id')
