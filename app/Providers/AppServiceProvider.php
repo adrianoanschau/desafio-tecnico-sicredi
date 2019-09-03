@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Console\Commands\CloseExpiredSessions;
 use App\Models\ScheduleSession;
 use App\Observers\ScheduleSessionObserver;
 use geekcom\ValidatorDocs\ValidatorProvider;
@@ -32,5 +33,7 @@ class AppServiceProvider extends ServiceProvider
         Resource::withoutWrapping();
 
         ScheduleSession::observe(ScheduleSessionObserver::class);
+
+        (new CloseExpiredSessions())->handle();
     }
 }

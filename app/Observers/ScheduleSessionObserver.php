@@ -31,7 +31,7 @@ class ScheduleSessionObserver
     }
 
     /**
-     * Handle the schedule session "updated" event.
+     * Handle the schedule session "updating" event.
      *
      * @param  ScheduleSession  $scheduleSession
      * @return void
@@ -42,5 +42,17 @@ class ScheduleSessionObserver
         if (isset($dirty['closed_at'])) {
             $scheduleSession->schedule->currentSession()->dissociate()->save();
         }
+    }
+
+    /**
+     * Handle the schedule session "updated" event.
+     *
+     * @param  ScheduleSession  $scheduleSession
+     * @return void
+     */
+    public function updated(ScheduleSession $scheduleSession)
+    {
+        $scheduleSession->schedule->currentSession()
+            ->dissociate($scheduleSession)->save();
     }
 }
