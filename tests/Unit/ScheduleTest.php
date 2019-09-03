@@ -60,9 +60,10 @@ class ScheduleTest extends TestCase
     public function testCanListSchedules()
     {
         /** @var Collection $schedules */
-        $schedules = factory(Schedule::class, 2)->create()->map(function (Schedule $schedule) {
-            return $schedule->only([ 'id', 'title', 'description' ]);
-        });
+        $schedules = factory(Schedule::class, 2)->create()->sortBy('created_at', null, true)
+            ->map(function (Schedule $schedule) {
+                return $schedule->only([ 'id', 'title', 'description' ]);
+            });
 
         $this->get(route('schedules.index'))
             ->assertStatus(HttpStatusCodeEnum::SUCCESS)
@@ -77,13 +78,15 @@ class ScheduleTest extends TestCase
         /** @var Schedule $schedule */
         $schedule = factory(Schedule::class)->create();
 
-        $resource = (new ScheduleResource($schedule))->resolve();
+        $resource = new ScheduleResource($schedule);
+        $expected = $resource->resolve();
+        $expected['sessions'] = $resource->sessions->toArray();
 
         $this->put(route('schedules.openSession', [
             'schedule' => $schedule->id,
         ]), [])
             ->assertStatus(HttpStatusCodeEnum::SUCCESS)
-            ->assertJson($resource);
+            ->assertJson($expected);
     }
 
     public function testCanOpenScheduleSessionWithCustomTime()
@@ -93,14 +96,16 @@ class ScheduleTest extends TestCase
         /** @var Schedule $schedule */
         $schedule = factory(Schedule::class)->create();
 
-        $resource = (new ScheduleResource($schedule))->resolve();
+        $resource = new ScheduleResource($schedule);
+        $expected = $resource->resolve();
+        $expected['sessions'] = $resource->sessions->toArray();
 
         $this->put(route('schedules.openSession', [
             'schedule' => $schedule->id,
             'time' => $customTime
         ]), [])
             ->assertStatus(HttpStatusCodeEnum::SUCCESS)
-            ->assertJson($resource);
+            ->assertJson($expected);
 
         $schedule->refresh();
         $this->assertEquals($customTime, $schedule->currentSession->opening_time);

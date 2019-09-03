@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\ScheduleSession;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Schema;
 
 class CloseExpiredSessions extends Command
 {
@@ -39,14 +40,16 @@ class CloseExpiredSessions extends Command
      */
     public function handle()
     {
-        $sessions = ScheduleSession::where('closed_at', null)->get();
-        $sessions->map(function (ScheduleSession $session) {
-            $openedAt = Carbon::createFromFormat('Y-m-d H:i:s', $session->opened_at);
-            $closedAt = Carbon::createFromTimestamp($openedAt->getTimestamp() + $session->opening_time);
-            if ($closedAt < Carbon::now()) {
-                $session->closed_at = $closedAt;
-                $session->save();
-            }
-        });
+        if (Schema::hasTable('schedule_sessions')) {
+            $sessions = ScheduleSession::where('closed_at', null)->get();
+            $sessions->map(function (ScheduleSession $session) {
+                $openedAt = Carbon::createFromFormat('Y-m-d H:i:s', $session->opened_at);
+                $closedAt = Carbon::createFromTimestamp($openedAt->getTimestamp() + $session->opening_time);
+                if ($closedAt < Carbon::now()) {
+                    $session->closed_at = $closedAt;
+                    $session->save();
+                }
+            });
+        }
     }
 }
