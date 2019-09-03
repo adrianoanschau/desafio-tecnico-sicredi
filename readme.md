@@ -1,72 +1,52 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
+# Desafio Técnico Sicredi - por Adriano Anschau
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+## Sobre o Desafio
+```
+ No cooperativismo, cada associado possui um voto e as decisões são tomadas em assembleias, por votação.
+ A partir disso, você precisa criar uma solução back-end para gerenciar essas sessões de votação.
+ Essa solução deve ser executada na nuvem e promover as seguintes funcionalidades através de uma API
+ REST:
+ ● Cadastrar uma nova pauta;
+ ● Abrir uma sessão de votação em uma pauta (a sessão de votação deve ficar aberta por um tempo
+ determinado na chamada de abertura ou 1 minuto por default);
+ ● Receber votos dos associados em pautas (os votos são apenas 'Sim'/'Não'. Cada associado é
+ identificado por um id único e pode votar apenas uma vez por pauta);
+ ● Contabilizar os votos e dar o resultado da votação na pauta.
+ ```
 
-## About Laravel
+## Requisitos
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Linguagens/Tecnologias:
+- PHP 7.2 (linguagem principal)
+- PHPUnit (testes unitários automatizados)
+- OpenAPI - Swagger (documentação de API) 
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Links
+- [Documentação da API](http://desafio-tecnico-sicredi.herokuapp.com/api/v1/documentation)
+- [API em modo Produção](https://desafio-tecnico-sicredi.herokuapp.com/api/v1)
+- [Repopsitório](https://gitlab.com/adrianoanschau/desafio-tecnico-sicredi)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## A Solução
 
-## Learning Laravel
+#### Modelos/Entidades
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- **Schedule** - Representa cada Pauta;
+- **Associate** - Representa os Associados;
+- **ScheduleSession** - Representa as sessões de votação abertas para cada Pauta;
+- **Vote** - Representa os votos adicionados para cada sessão de votação
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1400 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+**Obs.:** Na dúvida sobre a possibilidade de cada Pauta poder ou não ter mais do que uma sessão de votação, desenvolvi para que houvesse a possibilidade de existir mais do que uma sessão de votação por pauta, porém, para esta primeira versão, a aplicação não permite a criação de uma segunda sessão para a mesma pauta. Desta forma, para uma nova versão, adicionar esta funcionalidade se torna facilitada, pois a aplicação já está preparada para este recurso.
 
-## Laravel Sponsors
+### A Aplicação
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+- **Criação de uma nova Pauta**: O usuário cria uma nova pauta adicionando título e descrição;
+- **Abertura de sessão de votação**: Uma nova sessão de votação é aberta para uma pauta existente, adicionando-se um tempo limite para que a mesma fique aberta, caso o tempo não seja informado, o valor de 60 segundos (1 minuto) é definido como padrão.
+- **Fechamento de sessão de votação**: Uma sessão é fechada automaticamente após transcorrido o tempo previamente definido, comuso da referência de data de abertura acrescido do tempo em segundos definido para tempo de abertura.
+- **Cadastro prévio de Associados**: Um associado pode ser previamente cadastrado no sistema, com nome e documento (CPF) pára o seu registro
+- **Voto em uma sessão**: O voto em uma sessão de votação pode ser feito com a opção: SIM ou NÃO, juntamente com a identificação do Associado, sendo este por referência ou apenas com o número do documento, em caso de associado previamente cadastrado no sistema. Também é possível votar com informações de um usuário que ainda não está cadastrado, neste caso informa-se o Nome e o Documento (CPF) e o mesmo será automaticamente cadastrado e seu voto contabilizado.
+- **Validação de Documento**: Toda tentativa de inserção de cadastro de Associado, o seu documento de CPF é validado.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
-- [Abdel Elrafa](https://abdelelrafa.com)
-- [Hyper Host](https://hyper.host)
+### A Validação do CPF
 
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-source software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+O sistema, internamente, realizada validação do documento (CPF) do candidato a Associado, caso o documento não esteja válido, a sua solicitação é recusada.
+Em caso positivo, o mesmo é inserido no sistema e a sua solicitação é processada.
